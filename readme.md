@@ -11,3 +11,16 @@
 ##架构
 采用MVP架构设计
 Model层与Presenter层解耦合,Model可以在底层使用sharedPreferences或者SQLite.
+
+###Model层设计
+
+####表
+	create table notes(
+		id int Primary key,
+		title varchar(40) not null,
+		content text not null,
+		alarm boolean Default false,
+		alarm_time datetime
+		);
+
+
