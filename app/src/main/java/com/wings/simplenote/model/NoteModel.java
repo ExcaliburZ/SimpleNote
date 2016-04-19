@@ -10,9 +10,8 @@ import android.util.Log;
 
 import com.wings.simplenote.BuildConfig;
 import com.wings.simplenote.domain.Note;
+import com.wings.simplenote.utils.DateFormatUtils;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +48,7 @@ public class NoteModel implements INoteModel {
         values.put(NoteEntry.COLUMN_NAME_TITLE, note.title);
         values.put(NoteEntry.COLUMN_NAME_CONTENT, note.content);
         values.put(NoteEntry.COLUMN_NAME_ALARM, note.hasAlarm);
-        String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(note.date);
+        String dateTime = DateFormatUtils.formatDateTime(note.date);
 
         values.put(NoteEntry.COLUMN_NAME_ALARM_TIME, dateTime);
 
@@ -73,7 +72,7 @@ public class NoteModel implements INoteModel {
         values.put(NoteEntry.COLUMN_NAME_TITLE, note.title);
         values.put(NoteEntry.COLUMN_NAME_CONTENT, note.content);
         values.put(NoteEntry.COLUMN_NAME_ALARM, note.hasAlarm);
-        String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(note.date);
+        String dateTime = DateFormatUtils.formatDateTime(note.date);
 
         values.put(NoteEntry.COLUMN_NAME_ALARM_TIME, dateTime);
 
@@ -106,7 +105,7 @@ public class NoteModel implements INoteModel {
     public List<Note> selectAll() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        Cursor cursor =  db.query(
+        Cursor cursor = db.query(
                 NoteEntry.TABLE_NAME,                   // The table to query
                 PROJECTION,                               // The columns to return
                 null,                                // The columns for the WHERE clause
@@ -162,8 +161,7 @@ public class NoteModel implements INoteModel {
         boolean alarm = alarmL != 0;
         String alarmTimeStr = cursor.getString(
                 cursor.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_ALARM_TIME));
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").
-                parse(alarmTimeStr, new ParsePosition(0));
+        Date date = DateFormatUtils.parse(alarmTimeStr);
         Note item = new Note(itemId, title, content, alarm, date);
         cursor.moveToNext();
         return item;

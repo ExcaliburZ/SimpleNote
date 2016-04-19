@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,31 +19,61 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.wings.simplenote.adapter.NotesAdapter;
+import com.wings.simplenote.domain.Note;
 import com.wings.simplenote.receiver.AlarmReceiver;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private PendingIntent alarmIntent;
+    private RecyclerView mNotesViews;
+    private FloatingActionButton mAddNoteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
+    }
+
+    private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        findView();
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager
+                (MainActivity.this, LinearLayoutManager.VERTICAL, false);
+        mNotesViews.setLayoutManager(mLinearLayoutManager);
+        List<Note> testLists = new ArrayList<Note>() {
+            {
+                add(new Note(8778, "add", "test", false, new Date()));
+                add(new Note(61, "add", "adsd", false, new Date()));
+                add(new Note(23, "add", "test", false, new Date()));
+            }
+        };
+        mNotesViews.setAdapter(new NotesAdapter(MainActivity.this, testLists));
+        setListener();
+    }
+
+    private void setListener() {
+        mAddNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                addAlarm();
+
             }
 
         });
+    }
+
+    private void findView() {
+        mAddNoteButton = (FloatingActionButton) findViewById(R.id.fab);
+        mNotesViews = (RecyclerView) findViewById(R.id.content);
+
+
     }
 
     private void addAlarm() {
@@ -56,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         alarm.putExtra(AlarmClock.EXTRA_HOUR, 23);
         alarm.putExtra(AlarmClock.EXTRA_MINUTES, calendar.get(Calendar.MINUTE) + 1);
         alarm.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent clockIntent = PendingIntent.getActivity(this, 0, alarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -103,10 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
         dialog.show();
-    }
-
-    void addAl() {
-
     }
 
 

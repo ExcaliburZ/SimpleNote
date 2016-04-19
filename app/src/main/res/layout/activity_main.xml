@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,13 +31,5 @@
     android:layout_gravity="bottom|end"
     android:layout_margin="@dimen/fab_margin"
     android:src="@drawable/ic_add_white_48dp" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:onClick="cancel"
-        android:src="@drawable/ic_add_white_48dp" />
 
 </android.support.design.widget.CoordinatorLayout>
