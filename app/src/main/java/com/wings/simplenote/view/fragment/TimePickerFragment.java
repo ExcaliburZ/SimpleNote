@@ -1,4 +1,4 @@
-package com.wings.simplenote.fragment;
+package com.wings.simplenote.view.fragment;
 
 
 import android.app.Dialog;

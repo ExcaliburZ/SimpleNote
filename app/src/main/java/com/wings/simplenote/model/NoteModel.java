@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.wings.simplenote.BuildConfig;
-import com.wings.simplenote.domain.Note;
+import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.utils.DateFormatUtils;
 
 import java.util.ArrayList;
@@ -44,7 +44,9 @@ public class NoteModel implements INoteModel {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(NoteEntry._ID, note.id);
+        if (note.id != 0) {
+            values.put(NoteEntry._ID, note.id);
+        }
         values.put(NoteEntry.COLUMN_NAME_TITLE, note.title);
         values.put(NoteEntry.COLUMN_NAME_CONTENT, note.content);
         values.put(NoteEntry.COLUMN_NAME_ALARM, note.hasAlarm);
@@ -68,7 +70,6 @@ public class NoteModel implements INoteModel {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-//        values.put(NoteEntry._ID, note.id);
         values.put(NoteEntry.COLUMN_NAME_TITLE, note.title);
         values.put(NoteEntry.COLUMN_NAME_CONTENT, note.content);
         values.put(NoteEntry.COLUMN_NAME_ALARM, note.hasAlarm);
@@ -114,6 +115,9 @@ public class NoteModel implements INoteModel {
                 null,                                     // don't filter by row groups
                 null                                 // The sort order
         );
+        if (cursor.getCount() == 0) {
+            return null;
+        }
         cursor.moveToFirst();
         List<Note> notes = new ArrayList<>();
 

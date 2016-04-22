@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wings.simplenote.R;
-import com.wings.simplenote.domain.Note;
+import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.utils.DateFormatUtils;
 
 import java.util.List;
@@ -23,6 +23,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public NotesAdapter(Context context, List<Note> notesList) {
         this.mContext = context;
         this.mNotesList = notesList;
+    }
+
+    public void setNotesList(List<Note> NotesList) {
+        this.mNotesList = NotesList;
     }
 
     @Override

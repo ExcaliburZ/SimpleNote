@@ -1,6 +1,6 @@
 package com.wings.simplenote.model;
 
-import com.wings.simplenote.domain.Note;
+import com.wings.simplenote.model.domain.Note;
 
 import java.util.List;
 

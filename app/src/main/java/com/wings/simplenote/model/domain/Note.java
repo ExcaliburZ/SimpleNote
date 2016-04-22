@@ -1,4 +1,4 @@
-package com.wings.simplenote.domain;
+package com.wings.simplenote.model.domain;
 
 import java.util.Date;
 
@@ -22,4 +22,12 @@ public class Note {
         this.hasAlarm = hasAlarm;
         this.id = id;
     }
+
+    public Note(String title, String content, boolean hasAlarm, Date date) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.hasAlarm = hasAlarm;
+    }
+
 }
