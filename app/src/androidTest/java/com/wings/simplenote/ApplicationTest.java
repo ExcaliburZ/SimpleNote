@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
-import com.wings.simplenote.domain.Note;
+import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.model.NoteDbHelper;
 import com.wings.simplenote.model.NoteModel;
 
@@ -33,15 +33,19 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testAdd() {
         model = new NoteModel(getContext());
-        model.deleteNote(8778);
-        model.addNote(new Note(8778, "add", "test", false, new Date()));
+//        model.deleteNote(8778);
+        model.addNote(new Note("add", "test", false, new Date()));
+        model.addNote(new Note("add", "test2", false, new Date()));
     }
 
     public void testSelectAll() {
         model = new NoteModel(getContext());
         List<Note> notes = model.selectAll();
-        Log.i(TAG, "notes ::" + notes.size());
+        if (notes != null) {
+            Log.i(TAG, "notes ::" + notes.size());
+        }
     }
+
     public void testSelect() {
         model = new NoteModel(getContext());
         Note notes = model.selectNote(2);

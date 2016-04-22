@@ -1,13 +1,15 @@
-package com.wings.simplenote;
+package com.wings.simplenote.view;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,65 +17,62 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.wings.simplenote.R;
 import com.wings.simplenote.adapter.NotesAdapter;
-import com.wings.simplenote.domain.Note;
+import com.wings.simplenote.model.domain.Note;
+import com.wings.simplenote.presenter.INotesShowPresenter;
+import com.wings.simplenote.presenter.NotesListPresenter;
 import com.wings.simplenote.receiver.AlarmReceiver;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends AppCompatActivity implements INotesShowView,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
-    private RecyclerView mNotesViews;
-    private FloatingActionButton mAddNoteButton;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.content)
+    RecyclerView mNotesViews;
+    @Bind(R.id.refresh)
+    SwipeRefreshLayout mRefreshLayout;
+    @Bind(R.id.fab)
+    FloatingActionButton mAddNoteButton;
+
+    //    private List<Note> mNoteList;
+    private INotesShowPresenter presenter;
+    private NotesAdapter mNotesAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        findView();
+        setSupportActionBar(mToolbar);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager
                 (MainActivity.this, LinearLayoutManager.VERTICAL, false);
+        presenter = new NotesListPresenter(this);
+        presenter.showNotesList();
         mNotesViews.setLayoutManager(mLinearLayoutManager);
-        List<Note> testLists = new ArrayList<Note>() {
-            {
-                add(new Note(8778, "add", "test", false, new Date()));
-                add(new Note(61, "add", "adsd", false, new Date()));
-                add(new Note(23, "add", "test", false, new Date()));
-            }
-        };
-        mNotesViews.setAdapter(new NotesAdapter(MainActivity.this, testLists));
         setListener();
     }
 
+
     private void setListener() {
-        mAddNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-
-        });
-    }
-
-    private void findView() {
-        mAddNoteButton = (FloatingActionButton) findViewById(R.id.fab);
-        mNotesViews = (RecyclerView) findViewById(R.id.content);
-
-
+        mRefreshLayout.setOnRefreshListener(this);
     }
 
     private void addAlarm() {
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         today.set(year, month, day);
         boolean isToday = date.equals(today);
         if (isToday) {
-
+            System.out.println("today");
         }
         dialog.show();
     }
@@ -160,6 +159,47 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void cancel(View view) {
+
+    @Override
+    public void showNotes(List<Note> noteList) {
+        mNotesAdapter = new NotesAdapter(MainActivity.this, noteList);
+        mNotesViews.setAdapter(mNotesAdapter);
+    }
+
+    @Override
+    public void refreshNotes(List<Note> noteList) {
+        mNotesAdapter.setNotesList(noteList);
+        mNotesAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public Context getNotesContext() {
+        return MainActivity.this;
+    }
+
+    @Override
+    public void showLoading() {
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+            }
+        });
+    }
+
+    @Override
+    public void cancelLoading() {
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.refreshNotes();
+    }
+
+    @OnClick(R.id.fab)
+    public void onClick() {
+        //TODO Enter AddNote Activity
     }
 }
