@@ -24,20 +24,20 @@
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:exported="false"
-            android:process=":remote" >
+            android:process=":remote">
             <intent-filter>
                 <action android:name="com.wings.alarm" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".NewNoteActivity"
+            android:name=".view.AddNoteActivity"
             android:label="@string/title_activity_new_note"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".view.NoteDetailActivity"
+            android:label="@string/title_activity_detail_note"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

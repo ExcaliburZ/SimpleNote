@@ -94,5 +94,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_detail_note">NoteDetailActivity</string>
+    <string name="add_new_note">新建笔记</string>
 </resources>

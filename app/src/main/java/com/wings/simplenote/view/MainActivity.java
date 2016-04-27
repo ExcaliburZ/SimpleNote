@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     @OnClick(R.id.fab)
     public void onClick() {
-        //TODO Enter AddNote Activity
+        Intent enterNewActivity = new Intent(this, AddNoteActivity.class);
+        startActivity(enterNewActivity);
     }
 }

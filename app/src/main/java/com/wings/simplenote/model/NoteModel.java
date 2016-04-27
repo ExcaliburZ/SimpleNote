@@ -115,11 +115,11 @@ public class NoteModel implements INoteModel {
                 null,                                     // don't filter by row groups
                 null                                 // The sort order
         );
+        List<Note> notes = new ArrayList<>();
         if (cursor.getCount() == 0) {
-            return null;
+            return notes;
         }
         cursor.moveToFirst();
-        List<Note> notes = new ArrayList<>();
 
         while (!cursor.isLast()) {
             Note item = getNoteAndMoveNext(cursor);
