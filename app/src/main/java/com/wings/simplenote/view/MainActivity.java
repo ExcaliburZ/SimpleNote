@@ -1,9 +1,7 @@
 package com.wings.simplenote.view;
 
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.adapter.NotesAdapter;
@@ -93,49 +89,6 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), clockIntent);
     }
-
-    private void addDate() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar date = Calendar.getInstance();
-                date.set(year, monthOfYear, dayOfMonth);
-                addTime(date);
-            }
-        }, year, month, day);
-        dialog.show();
-        DatePicker datePicker = dialog.getDatePicker();
-        datePicker.setMinDate(calendar.getTimeInMillis());
-        datePicker.setSpinnersShown(true);
-    }
-
-    private void addTime(Calendar date) {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-            }
-        }, hour, minute, true);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        Calendar today = Calendar.getInstance();
-        today.set(year, month, day);
-        boolean isToday = date.equals(today);
-        if (isToday) {
-            System.out.println("today");
-        }
-        dialog.show();
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
