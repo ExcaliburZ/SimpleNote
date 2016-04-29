@@ -1,5 +1,6 @@
 package com.wings.simplenote.presenter;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
@@ -17,9 +18,9 @@ public class NotesListPresenter implements INotesShowPresenter {
     private INotesShowView notesShowView;
     private INoteModel noteModel;
 
-    public NotesListPresenter(INotesShowView notesShowView) {
+    public NotesListPresenter(Context context,INotesShowView notesShowView) {
         this.notesShowView = notesShowView;
-        noteModel = new NoteModel(notesShowView.getNotesContext());
+        noteModel = new NoteModel(context);
     }
 
     @Override

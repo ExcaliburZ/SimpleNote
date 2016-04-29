@@ -2,7 +2,6 @@ package com.wings.simplenote.view;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.AlarmClock;
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
+    private static final int ADD_NOTE_EVENT = 0;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.content)
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     FloatingActionButton mAddNoteButton;
 
     //    private List<Note> mNoteList;
-    private INotesShowPresenter presenter;
+    private INotesShowPresenter mShowPresenter;
     private NotesAdapter mNotesAdapter;
 
 
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         setSupportActionBar(mToolbar);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager
                 (MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        presenter = new NotesListPresenter(this);
-        presenter.showNotesList();
+        mShowPresenter = new NotesListPresenter(this, this);
+        mShowPresenter.showNotesList();
         mNotesViews.setLayoutManager(mLinearLayoutManager);
         setListener();
     }
@@ -127,11 +127,6 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
 
     @Override
-    public Context getNotesContext() {
-        return MainActivity.this;
-    }
-
-    @Override
     public void showLoading() {
         mRefreshLayout.post(new Runnable() {
             @Override
@@ -148,12 +143,26 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     @Override
     public void onRefresh() {
-        presenter.refreshNotes();
+        mShowPresenter.refreshNotes();
     }
 
     @OnClick(R.id.fab)
     public void onClick() {
         Intent enterNewActivity = new Intent(this, AddNoteActivity.class);
-        startActivity(enterNewActivity);
+        startActivityForResult(enterNewActivity, ADD_NOTE_EVENT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case ADD_NOTE_EVENT:
+                if (resultCode == AddNoteActivity.ADD_SUCCESS) {
+                    mShowPresenter.showNotesList();
+                }
+                break;
+
+        }
+
     }
 }

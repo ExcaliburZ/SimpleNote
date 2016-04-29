@@ -12,6 +12,11 @@ public class DateFormatUtils {
             = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat mSimpleDateFormat
             = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat mSimpleTimeFormat
+            = new SimpleDateFormat("HH:mm");
+
+    private static final SimpleDateFormat mSimpleTextFormat
+            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public static String formatDateTime(Date date) {
         return mSimpleDateTimeFormat.format(date);
@@ -21,10 +26,23 @@ public class DateFormatUtils {
         return mSimpleDateFormat.format(date);
     }
 
+    public static String formatTime(Date date) {
+        return mSimpleTimeFormat.format(date);
+    }
+
 
     public static Date parse(String dateStr) {
         try {
             return mSimpleDateTimeFormat.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new RuntimeException("date formatDateTime error");
+        }
+    }
+
+    public static Date parseText(String dateStr) {
+        try {
+            return mSimpleTextFormat.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
             throw new RuntimeException("date formatDateTime error");

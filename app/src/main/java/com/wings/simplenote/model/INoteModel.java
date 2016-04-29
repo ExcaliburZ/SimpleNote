@@ -8,7 +8,7 @@ import java.util.List;
  * Created by wing on 2016/4/12.
  */
 public interface INoteModel {
-    void addNote(Note note);
+    boolean addNote(Note note);
 
     void updateNote(Note note);
 

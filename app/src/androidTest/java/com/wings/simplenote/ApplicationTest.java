@@ -35,7 +35,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         model = new NoteModel(getContext());
 //        model.deleteNote(8778);
         model.addNote(new Note("add", "test", false, new Date()));
-        model.addNote(new Note("add", "test2", false, new Date()));
+//        model.addNote(new Note("add", "test2", false, new Date()));
     }
 
     public void testSelectAll() {

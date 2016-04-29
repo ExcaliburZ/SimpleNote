@@ -1,7 +1,5 @@
 package com.wings.simplenote.view;
 
-import android.content.Context;
-
 import com.wings.simplenote.model.domain.Note;
 
 import java.util.List;
@@ -14,8 +12,6 @@ public interface INotesShowView {
     void showNotes(List<Note> noteList);
 
     void refreshNotes(List<Note> noteList);
-
-    Context getNotesContext();
 
     void showLoading();
 

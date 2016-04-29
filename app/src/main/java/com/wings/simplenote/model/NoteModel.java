@@ -38,7 +38,7 @@ public class NoteModel implements INoteModel {
     }
 
     @Override
-    public void addNote(Note note) {
+    public boolean addNote(Note note) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -60,7 +60,8 @@ public class NoteModel implements INoteModel {
                 NoteEntry.TABLE_NAME,
                 NoteEntry.COLUMN_NAME_NULLABLE,
                 values);
-        Log.i(TAG, "newRowId ::" + newRowId);
+        mDbHelper.close();
+        return newRowId != -1;
     }
 
     @Override
@@ -121,7 +122,7 @@ public class NoteModel implements INoteModel {
         }
         cursor.moveToFirst();
 
-        while (!cursor.isLast()) {
+        while (!cursor.isAfterLast()) {
             Note item = getNoteAndMoveNext(cursor);
             notes.add(item);
         }

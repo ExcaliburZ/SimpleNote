@@ -2,6 +2,7 @@ package com.wings.simplenote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -17,6 +18,9 @@ import com.wings.simplenote.R;
 import com.wings.simplenote.listener.OnConfirmListener;
 import com.wings.simplenote.listener.OnDatePickListener;
 import com.wings.simplenote.listener.OnTimePickListener;
+import com.wings.simplenote.model.domain.Note;
+import com.wings.simplenote.presenter.AddNotePresenter;
+import com.wings.simplenote.presenter.IAddNotePresenter;
 import com.wings.simplenote.utils.DateFormatUtils;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.view.fragment.DatePickerFragment;
@@ -35,12 +39,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class AddNoteActivity extends AppCompatActivity {
+public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
 
     private static final String TAG = "AddNoteActivity";
     private static final String TIME_PICK_DIALOG = "TimePickerFragment";
     private static final String DATE_PICK_DIALOG = "DatePickerFragment";
     private static final String TRASH_CONFIRM_FRAGMENT = "TrashConfirmFragment";
+    public static final int ADD_SUCCESS = 1;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.ib_save)
@@ -58,7 +63,6 @@ public class AddNoteActivity extends AppCompatActivity {
     @Bind(R.id.et_content)
     EditText mEtContent;
     private boolean isPicked = false;
-    private Calendar mAlarmCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +136,35 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private void saveNote() {
+        if (confirmNoteComplete()) {
+            Note note = getNote();
+            IAddNotePresenter presenter = new AddNotePresenter(this, this);
+            presenter.saveNote(note);
+        }
+    }
 
+    private boolean confirmNoteComplete() {
+        if (TextUtils.isEmpty(mEtTitle.getText())) {
+            SingletonToastUtils.showToast(this, "title can't be empty");
+            return false;
+        }
+        return true;
+    }
+
+    @NonNull
+    private Note getNote() {
+        Note note = new Note();
+
+        note.title = String.valueOf(mEtTitle.getText());
+        note.content = String.valueOf(mEtContent.getText());
+        note.hasAlarm = mCbAlarm.isChecked();
+        note.date = new Date();
+        String date = String.valueOf(mTvDate.getText()) + " " +
+                String.valueOf(mTvTime.getText());
+        if (!TextUtils.isEmpty(date.trim())) {
+            note.date = DateFormatUtils.parseText(date);
+        }
+        return note;
     }
 
     private void confirmTrash() {
@@ -185,7 +217,6 @@ public class AddNoteActivity extends AppCompatActivity {
         timePickDialog.setOnTimePickListener(new OnTimePickListener() {
             @Override
             public void onTimePick(int hourOfDay, int minute) {
-                String time = hourOfDay + getString(R.string.time_separator) + minute;
                 CharSequence text = mTvDate.getText();
                 Assert.assertNotNull(text);
                 String today = DateFormatUtils.formatDate(new Date());
@@ -193,6 +224,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
+
                 if (TextUtils.equals(String.valueOf(text), today)) {
                     if (calendar.getTimeInMillis() < System.currentTimeMillis() + 60000) {
                         //Alarm time over now less than one minute,choose time again
@@ -200,7 +232,7 @@ public class AddNoteActivity extends AppCompatActivity {
                         pickTime();
                     }
                 }
-                mAlarmCalendar = calendar;
+                String time = DateFormatUtils.formatTime(calendar.getTime());
                 mTvTime.setText(time);
                 if (!isPicked) {
                     isPicked = true;
@@ -215,5 +247,27 @@ public class AddNoteActivity extends AppCompatActivity {
             }
         });
         timePickDialog.show(getFragmentManager(), TIME_PICK_DIALOG);
+    }
+
+    @Override
+    public void showProcess() {
+
+    }
+
+    @Override
+    public void dismissProcess() {
+
+    }
+
+    @Override
+    public void showSuccessRemind() {
+        setResult(ADD_SUCCESS);
+        exit();
+        SingletonToastUtils.showToast(this, "add success");
+    }
+
+    @Override
+    public void showFailureRemind() {
+        SingletonToastUtils.showToast(this, "Error,please try again");
     }
 }

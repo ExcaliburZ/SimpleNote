@@ -30,7 +30,6 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2015-10-24"
             android:visibility="invisible" />
 
         <TextView
@@ -40,7 +39,6 @@
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_toRightOf="@+id/tv_date"
             android:gravity="center_horizontal"
-            android:text="20:18"
             android:visibility="invisible" />
 
         <CheckBox
