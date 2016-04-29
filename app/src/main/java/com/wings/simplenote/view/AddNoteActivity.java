@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -13,11 +14,19 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.wings.simplenote.R;
+import com.wings.simplenote.listener.OnConfirmListener;
 import com.wings.simplenote.listener.OnDatePickListener;
 import com.wings.simplenote.listener.OnTimePickListener;
+import com.wings.simplenote.utils.DateFormatUtils;
+import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.view.fragment.DatePickerFragment;
 import com.wings.simplenote.view.fragment.TimePickerFragment;
+import com.wings.simplenote.view.fragment.TrashConfirmFragment;
 
+import junit.framework.Assert;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,8 +37,10 @@ import butterknife.OnClick;
 
 public class AddNoteActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddNoteActivity";
     private static final String TIME_PICK_DIALOG = "TimePickerFragment";
     private static final String DATE_PICK_DIALOG = "DatePickerFragment";
+    private static final String TRASH_CONFIRM_FRAGMENT = "TrashConfirmFragment";
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.ib_save)
@@ -47,6 +58,7 @@ public class AddNoteActivity extends AppCompatActivity {
     @Bind(R.id.et_content)
     EditText mEtContent;
     private boolean isPicked = false;
+    private Calendar mAlarmCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +117,10 @@ public class AddNoteActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_save:
+                saveNote();
                 break;
             case R.id.ib_trash:
+                confirmTrash();
                 break;
             case R.id.tv_date:
                 pickDate();
@@ -117,14 +131,36 @@ public class AddNoteActivity extends AppCompatActivity {
         }
     }
 
+    private void saveNote() {
+
+    }
+
+    private void confirmTrash() {
+        TrashConfirmFragment fragment = new TrashConfirmFragment();
+        fragment.setOnConfirmListener(new OnConfirmListener() {
+            @Override
+            public void onConfirm() {
+                exit();
+            }
+
+        });
+        fragment.show(getFragmentManager(), TRASH_CONFIRM_FRAGMENT);
+    }
+
+    private void exit() {
+        this.finish();
+    }
+
     private void pickDate() {
         DatePickerFragment datePickerDialog = new DatePickerFragment();
         datePickerDialog.setOnDatePickListener(new OnDatePickListener() {
             @Override
             public void onDatePick(int year, int monthOfYear, int dayOfMonth) {
-                String date = year + getString(R.string.date_separator)
-                        + monthOfYear + getString(R.string.date_separator) + dayOfMonth;
-                mTvDate.setText(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, monthOfYear, dayOfMonth);
+                Date date = new Date(calendar.getTimeInMillis());
+                String text = DateFormatUtils.formatDate(date);
+                mTvDate.setText(text);
                 PickTimeIfCreateAlarm();
             }
 
@@ -150,6 +186,21 @@ public class AddNoteActivity extends AppCompatActivity {
             @Override
             public void onTimePick(int hourOfDay, int minute) {
                 String time = hourOfDay + getString(R.string.time_separator) + minute;
+                CharSequence text = mTvDate.getText();
+                Assert.assertNotNull(text);
+                String today = DateFormatUtils.formatDate(new Date());
+                //if the date is today,decide time has not passed
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                if (TextUtils.equals(String.valueOf(text), today)) {
+                    if (calendar.getTimeInMillis() < System.currentTimeMillis() + 60000) {
+                        //Alarm time over now less than one minute,choose time again
+                        SingletonToastUtils.showToast(AddNoteActivity.this, "The time has passed");
+                        pickTime();
+                    }
+                }
+                mAlarmCalendar = calendar;
                 mTvTime.setText(time);
                 if (!isPicked) {
                     isPicked = true;

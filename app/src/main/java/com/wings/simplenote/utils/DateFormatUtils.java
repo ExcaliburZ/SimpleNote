@@ -22,7 +22,6 @@ public class DateFormatUtils {
     }
 
 
-
     public static Date parse(String dateStr) {
         try {
             return mSimpleDateTimeFormat.parse(dateStr);
@@ -31,5 +30,15 @@ public class DateFormatUtils {
             throw new RuntimeException("date formatDateTime error");
         }
     }
+
+    public static Date parseDate(String dateStr) {
+        try {
+            return mSimpleDateTimeFormat.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new RuntimeException("date formatDateTime error");
+        }
+    }
+
 
 }

@@ -51,8 +51,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Log.i(TAG, "onDateSet: " + year + monthOfYear + dayOfMonth);
         if (mOnDatePickListener != null) {
-            // monthOfYear is 0-11,so plus 1
-            monthOfYear++;
             mOnDatePickListener.onDatePick(year, monthOfYear, dayOfMonth);
         }
     }
