@@ -100,4 +100,5 @@
     <string name="time_separator">:</string>
     <string name="date_separator">-</string>
     <string name="title_activity_edit_note">EditNoteActivity</string>
+    <string name="note_fragment">note_fragment</string>
 </resources>

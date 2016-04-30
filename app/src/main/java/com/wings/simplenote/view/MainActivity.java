@@ -19,7 +19,7 @@ import com.wings.simplenote.R;
 import com.wings.simplenote.adapter.NotesAdapter;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.INotesShowPresenter;
-import com.wings.simplenote.presenter.NotesListPresenter;
+import com.wings.simplenote.presenter.impl.NotesListPresenter;
 import com.wings.simplenote.receiver.AlarmReceiver;
 
 import java.util.Calendar;
@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
-    private static final int ADD_NOTE_EVENT = 0;
+    public static final int ADD_NOTE_EVENT = 0;
+    public static final int EDIT_NOTE_EVENT = 1;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.content)
@@ -158,6 +159,12 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         switch (requestCode) {
             case ADD_NOTE_EVENT:
                 if (resultCode == AddNoteActivity.ADD_SUCCESS) {
+                    mShowPresenter.showNotesList();
+                }
+                break;
+
+            case EDIT_NOTE_EVENT:
+                if (resultCode == EditNoteActivity.UPDATE_SUCCESS) {
                     mShowPresenter.showNotesList();
                 }
                 break;

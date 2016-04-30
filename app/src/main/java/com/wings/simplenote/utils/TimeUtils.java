@@ -15,7 +15,6 @@ public class TimeUtils {
             = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat mSimpleTimeFormat
             = new SimpleDateFormat("HH:mm");
-
     private static final SimpleDateFormat mSimpleTextFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -44,6 +43,15 @@ public class TimeUtils {
     public static Date parseText(String dateStr) {
         try {
             return mSimpleTextFormat.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new RuntimeException("date formatDateTime error");
+        }
+    }
+
+    public static Date parseTime(String dateStr) {
+        try {
+            return mSimpleTimeFormat.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
             throw new RuntimeException("date formatDateTime error");

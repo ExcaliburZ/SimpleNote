@@ -1,4 +1,4 @@
-package com.wings.simplenote.presenter;
+package com.wings.simplenote.presenter.impl;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.model.INoteModel;
 import com.wings.simplenote.model.NoteModel;
+import com.wings.simplenote.presenter.INotesShowPresenter;
 import com.wings.simplenote.view.INotesShowView;
 
 import java.util.List;

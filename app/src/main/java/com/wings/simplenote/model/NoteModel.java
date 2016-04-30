@@ -68,7 +68,7 @@ public class NoteModel implements INoteModel {
     }
 
     @Override
-    public void updateNote(Note note) {
+    public boolean updateNote(Note note) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -81,13 +81,11 @@ public class NoteModel implements INoteModel {
         String dateTime = TimeUtils.formatDateTime(note.date);
         values.put(NoteEntry.COLUMN_NAME_ALARM_TIME, dateTime);
 
-        String createDate = TimeUtils.formatDateTime(note.createDate);
-        values.put(NoteEntry.COLUMN_NAME_CREATE_TIME, createDate);
-
-        db.update(
+        int affectRows = db.update(
                 NoteEntry.TABLE_NAME,
                 values, NoteEntry._ID + " = ?",
                 new String[]{String.valueOf(note.id)});
+        return affectRows != 0;
     }
 
     @Override
@@ -137,7 +135,7 @@ public class NoteModel implements INoteModel {
     }
 
     @Override
-    public Note selectNote(int id) {
+    public Note selectNote(long id) {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         Cursor cursor = db.query(

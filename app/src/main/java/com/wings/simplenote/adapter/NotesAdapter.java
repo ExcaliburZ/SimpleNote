@@ -1,5 +1,6 @@
 package com.wings.simplenote.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.utils.TimeUtils;
+import com.wings.simplenote.view.MainActivity;
 import com.wings.simplenote.view.NoteDetailActivity;
 
 import java.util.Calendar;
@@ -62,7 +64,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, NoteDetailActivity.class);
                 intent.putExtra("note", noteItem);
-                mContext.startActivity(intent);
+                ((Activity) mContext).startActivityForResult(intent, MainActivity.EDIT_NOTE_EVENT);
             }
         });
     }

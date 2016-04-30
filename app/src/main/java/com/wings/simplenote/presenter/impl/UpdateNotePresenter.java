@@ -1,4 +1,4 @@
-package com.wings.simplenote.presenter;
+package com.wings.simplenote.presenter.impl;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,26 +6,28 @@ import android.os.AsyncTask;
 import com.wings.simplenote.model.INoteModel;
 import com.wings.simplenote.model.NoteModel;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.view.IAddNoteView;
+import com.wings.simplenote.presenter.IUpdateNotePresenter;
+import com.wings.simplenote.view.INoteView;
 
 /**
  * Created by wing on 2016/4/29.
  */
-public class AddNotePresenter implements IAddNotePresenter {
+public class UpdateNotePresenter implements IUpdateNotePresenter {
     private INoteModel mNoteModel;
-    private IAddNoteView mAddNoteView;
+    private INoteView mAddNoteView;
 
-    public AddNotePresenter(Context context, IAddNoteView iAddNoteView) {
+    public UpdateNotePresenter(Context context, INoteView iNoteView) {
         this.mNoteModel = new NoteModel(context);
-        this.mAddNoteView = iAddNoteView;
+        this.mAddNoteView = iNoteView;
     }
+
 
     @Override
-    public void saveNote(Note note) {
-        new AddNoteAsyncTask().execute(note);
+    public void updateNote(Note note) {
+        new UpdateNoteAsyncTask().execute(note);
     }
 
-    class AddNoteAsyncTask extends AsyncTask<Note, Void, Boolean> {
+    class UpdateNoteAsyncTask extends AsyncTask<Note, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -34,7 +36,7 @@ public class AddNotePresenter implements IAddNotePresenter {
 
         @Override
         protected Boolean doInBackground(Note... params) {
-            return mNoteModel.addNote(params[0]);
+            return mNoteModel.updateNote(params[0]);
         }
 
         @Override

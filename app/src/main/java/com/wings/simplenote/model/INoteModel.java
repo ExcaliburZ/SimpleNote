@@ -10,11 +10,11 @@ import java.util.List;
 public interface INoteModel {
     boolean addNote(Note note);
 
-    void updateNote(Note note);
+    boolean updateNote(Note note);
 
     void deleteNote(int id);
 
     List<Note> selectAll();
 
-    Note selectNote(int id);
+    Note selectNote(long id);
 }

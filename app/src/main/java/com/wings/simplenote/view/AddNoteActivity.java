@@ -2,7 +2,6 @@ package com.wings.simplenote.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -19,10 +18,10 @@ import com.wings.simplenote.listener.OnConfirmListener;
 import com.wings.simplenote.listener.OnDatePickListener;
 import com.wings.simplenote.listener.OnTimePickListener;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.AddNotePresenter;
+import com.wings.simplenote.presenter.impl.AddNotePresenter;
 import com.wings.simplenote.presenter.IAddNotePresenter;
-import com.wings.simplenote.utils.TimeUtils;
 import com.wings.simplenote.utils.SingletonToastUtils;
+import com.wings.simplenote.utils.TimeUtils;
 import com.wings.simplenote.view.fragment.DatePickerFragment;
 import com.wings.simplenote.view.fragment.TimePickerFragment;
 import com.wings.simplenote.view.fragment.TrashConfirmFragment;
@@ -37,7 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
+public class AddNoteActivity extends AppCompatActivity implements INoteView {
 
     private static final String TAG = "AddNoteActivity";
     private static final String TIME_PICK_DIALOG = "TimePickerFragment";
@@ -149,7 +148,6 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
         return true;
     }
 
-    @NonNull
     private Note getNote() {
         Note note = new Note();
 
@@ -184,6 +182,12 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
         this.finish();
     }
 
+    private void PickTimeIfCreateAlarm() {
+        if (!isPicked) {
+            pickTime();
+        }
+    }
+
     private void pickDate() {
         DatePickerFragment datePickerDialog = new DatePickerFragment();
         datePickerDialog.setOnDatePickListener(new OnDatePickListener() {
@@ -205,12 +209,6 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
             }
         });
         datePickerDialog.show(getFragmentManager(), DATE_PICK_DIALOG);
-    }
-
-    private void PickTimeIfCreateAlarm() {
-        if (!isPicked) {
-            pickTime();
-        }
     }
 
     private void pickTime() {
