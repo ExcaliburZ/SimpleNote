@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     private void init() {
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(R.string.all_notes);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager
                 (MainActivity.this, LinearLayoutManager.VERTICAL, false);
         mShowPresenter = new NotesListPresenter(this, this);
@@ -104,12 +105,10 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -166,9 +165,9 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
             case EDIT_NOTE_EVENT:
                 if (resultCode == EditNoteActivity.UPDATE_SUCCESS) {
                     mShowPresenter.showNotesList();
+                    Log.i(TAG, "onActivityResult: UPDATE_SUCCESS" + EditNoteActivity.UPDATE_SUCCESS);
                 }
                 break;
-
         }
 
     }
