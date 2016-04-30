@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="@string/edit_notes_fragment"
     tools:context=".view.fragment.EditNoteActivityFragment"
     tools:showIn="@layout/activity_edit_note">
-    <include layout="@layout/content_add_note" />
+
+    <include layout="@layout/content_input_note" />
 </FrameLayout>

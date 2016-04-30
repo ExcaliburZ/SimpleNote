@@ -177,6 +177,14 @@ public class EditNoteActivityFragment extends Fragment {
         }
     }
 
+    public boolean confirmNoteComplete() {
+        if (TextUtils.isEmpty(mEtTitle.getText())) {
+            SingletonToastUtils.showToast(getActivity(), "title can't be empty");
+            return false;
+        }
+        return true;
+    }
+
     private void pickTime() {
         TimePickerFragment timePickDialog = new TimePickerFragment();
         timePickDialog.setOnTimePickListener(new OnTimePickListener() {

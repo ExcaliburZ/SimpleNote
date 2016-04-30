@@ -42,7 +42,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     private void initData() {
         mNoteItem = (Note) getIntent().getSerializableExtra("note");
         mNoteFragment = (EditNoteActivityFragment)
-                getFragmentManager().findFragmentByTag(getString(R.string.note_fragment));
+                getFragmentManager().findFragmentByTag(getString(R.string.edit_notes_fragment));
         mUpdateNotePresenter = new UpdateNotePresenter(this, this);
     }
 
@@ -64,8 +64,10 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_update:
-                Note note = mNoteFragment.getNote(false, mNoteItem.id);
-                mUpdateNotePresenter.updateNote(note);
+                if (mNoteFragment.confirmNoteComplete()) {
+                    Note note = mNoteFragment.getNote(false, mNoteItem.id);
+                    mUpdateNotePresenter.updateNote(note);
+                }
                 break;
         }
     }
