@@ -9,7 +9,8 @@ public class NoteContract {
     public static final class FeedReaderContract {
         // To prevent someone from accidentally instantiating the contract class,
         // give it an empty constructor.
-        public FeedReaderContract() {}
+        public FeedReaderContract() {
+        }
 
         /* Inner class that defines the table contents */
         public static abstract class NoteEntry implements BaseColumns {
@@ -19,7 +20,8 @@ public class NoteContract {
             public static final String COLUMN_NAME_ID = "id";
             public static final String COLUMN_NAME_CONTENT = "content";
             public static final String COLUMN_NAME_ALARM_TIME = "alarm_time";
-            public static String COLUMN_NAME_NULLABLE ="NULL";
+            public static final String COLUMN_NAME_CREATE_TIME = "create_time";
+            public static String COLUMN_NAME_NULLABLE = "NULL";
         }
     }
 }

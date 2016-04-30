@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.wings.simplenote.BuildConfig;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.utils.DateFormatUtils;
+import com.wings.simplenote.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +31,7 @@ public class NoteModel implements INoteModel {
             NoteEntry.COLUMN_NAME_CONTENT,
             NoteEntry.COLUMN_NAME_ALARM,
             NoteEntry.COLUMN_NAME_ALARM_TIME,
+            NoteEntry.COLUMN_NAME_CREATE_TIME,
     };
 
     public NoteModel(Context context) {
@@ -50,10 +51,12 @@ public class NoteModel implements INoteModel {
         values.put(NoteEntry.COLUMN_NAME_TITLE, note.title);
         values.put(NoteEntry.COLUMN_NAME_CONTENT, note.content);
         values.put(NoteEntry.COLUMN_NAME_ALARM, note.hasAlarm);
-        String dateTime = DateFormatUtils.formatDateTime(note.date);
 
+        String dateTime = TimeUtils.formatDateTime(note.date);
         values.put(NoteEntry.COLUMN_NAME_ALARM_TIME, dateTime);
 
+        String createDate = TimeUtils.formatDateTime(note.createDate);
+        values.put(NoteEntry.COLUMN_NAME_CREATE_TIME, createDate);
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
         newRowId = db.insert(
@@ -74,9 +77,12 @@ public class NoteModel implements INoteModel {
         values.put(NoteEntry.COLUMN_NAME_TITLE, note.title);
         values.put(NoteEntry.COLUMN_NAME_CONTENT, note.content);
         values.put(NoteEntry.COLUMN_NAME_ALARM, note.hasAlarm);
-        String dateTime = DateFormatUtils.formatDateTime(note.date);
 
+        String dateTime = TimeUtils.formatDateTime(note.date);
         values.put(NoteEntry.COLUMN_NAME_ALARM_TIME, dateTime);
+
+        String createDate = TimeUtils.formatDateTime(note.createDate);
+        values.put(NoteEntry.COLUMN_NAME_CREATE_TIME, createDate);
 
         db.update(
                 NoteEntry.TABLE_NAME,
@@ -164,10 +170,16 @@ public class NoteModel implements INoteModel {
         long alarmL = cursor.getLong(
                 cursor.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_ALARM));
         boolean alarm = alarmL != 0;
+
         String alarmTimeStr = cursor.getString(
                 cursor.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_ALARM_TIME));
-        Date date = DateFormatUtils.parse(alarmTimeStr);
-        Note item = new Note(itemId, title, content, alarm, date);
+        Date date = TimeUtils.parse(alarmTimeStr);
+
+        String createTimeStr = cursor.getString(
+                cursor.getColumnIndexOrThrow(NoteEntry.COLUMN_NAME_CREATE_TIME));
+        Date createTime = TimeUtils.parse(createTimeStr);
+
+        Note item = new Note(itemId, title, content, alarm, date, createTime);
         cursor.moveToNext();
         return item;
     }

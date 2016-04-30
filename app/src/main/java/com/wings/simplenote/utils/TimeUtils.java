@@ -2,12 +2,13 @@ package com.wings.simplenote.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by wing on 2016/4/19.
  */
-public class DateFormatUtils {
+public class TimeUtils {
     private static final SimpleDateFormat mSimpleDateTimeFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat mSimpleDateFormat
@@ -51,11 +52,17 @@ public class DateFormatUtils {
 
     public static Date parseDate(String dateStr) {
         try {
-            return mSimpleDateTimeFormat.parse(dateStr);
+            return mSimpleDateFormat.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
             throw new RuntimeException("date formatDateTime error");
         }
+    }
+
+    public static boolean isSameDay(Calendar tvCalendar, Calendar today) {
+        return tvCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && tvCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+                && tvCalendar.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
 
 

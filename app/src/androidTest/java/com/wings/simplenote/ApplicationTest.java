@@ -34,7 +34,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testAdd() {
         model = new NoteModel(getContext());
 //        model.deleteNote(8778);
-        model.addNote(new Note("add", "test", false, new Date()));
+        model.addNote(new Note("add", "test", false, new Date(), new Date()));
 //        model.addNote(new Note("add", "test2", false, new Date()));
     }
 
@@ -60,6 +60,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testUpdate() {
         model = new NoteModel(getContext());
-        model.updateNote(new Note(2, "update", "zjq", true, new Date()));
+        model.updateNote(new Note(2, "update", "zjq", true, new Date(), new Date()));
     }
 }

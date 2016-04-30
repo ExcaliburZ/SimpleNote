@@ -1,6 +1,7 @@
 package com.wings.simplenote.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.widget.TextView;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.utils.DateFormatUtils;
+import com.wings.simplenote.utils.TimeUtils;
+import com.wings.simplenote.view.NoteDetailActivity;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -42,10 +45,26 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
-        Note noteItem = mNotesList.get(position);
+        final Note noteItem = mNotesList.get(position);
         holder.titleView.setText(noteItem.title);
-        String date = DateFormatUtils.formatDate(noteItem.date);
-        holder.dateView.setText(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(noteItem.createDate);
+        String dateTime;
+        //if today ,set time .else set date
+        if (TimeUtils.isSameDay(calendar, Calendar.getInstance())) {
+            dateTime = TimeUtils.formatTime(noteItem.createDate);
+        } else {
+            dateTime = TimeUtils.formatDate(noteItem.createDate);
+        }
+        holder.dateView.setText(dateTime);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, NoteDetailActivity.class);
+                intent.putExtra("note", noteItem);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
 

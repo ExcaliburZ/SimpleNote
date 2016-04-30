@@ -24,7 +24,8 @@ public class NoteDbHelper extends SQLiteOpenHelper {
             NoteEntry.COLUMN_NAME_TITLE + CHAR_TYPE + NOT_NULL + COMMA_SEP +
             NoteEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + NOT_NULL + COMMA_SEP +
             NoteEntry.COLUMN_NAME_ALARM + BOOL_TYPE + " Default false" + COMMA_SEP +
-            NoteEntry.COLUMN_NAME_ALARM_TIME + DATE_TYPE + ");";
+            NoteEntry.COLUMN_NAME_ALARM_TIME + DATE_TYPE + COMMA_SEP +
+            NoteEntry.COLUMN_NAME_CREATE_TIME + DATE_TYPE + NOT_NULL + ");";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + NoteEntry.TABLE_NAME;
 

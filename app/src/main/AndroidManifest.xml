@@ -33,11 +33,16 @@
         <activity
             android:name=".view.NoteDetailActivity"
             android:label="@string/title_activity_detail_note"
+            android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.AddNoteActivity"
             android:label="@string/title_activity_new_note"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.EditNoteActivity"
+            android:label="@string/title_activity_edit_note"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

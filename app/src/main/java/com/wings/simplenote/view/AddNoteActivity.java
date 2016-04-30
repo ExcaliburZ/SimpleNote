@@ -21,13 +21,11 @@ import com.wings.simplenote.listener.OnTimePickListener;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.AddNotePresenter;
 import com.wings.simplenote.presenter.IAddNotePresenter;
-import com.wings.simplenote.utils.DateFormatUtils;
+import com.wings.simplenote.utils.TimeUtils;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.view.fragment.DatePickerFragment;
 import com.wings.simplenote.view.fragment.TimePickerFragment;
 import com.wings.simplenote.view.fragment.TrashConfirmFragment;
-
-import junit.framework.Assert;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -158,12 +156,15 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
         note.title = String.valueOf(mEtTitle.getText());
         note.content = String.valueOf(mEtContent.getText());
         note.hasAlarm = mCbAlarm.isChecked();
+        note.createDate = new Date();
+
         note.date = new Date();
         String date = String.valueOf(mTvDate.getText()) + " " +
                 String.valueOf(mTvTime.getText());
         if (!TextUtils.isEmpty(date.trim())) {
-            note.date = DateFormatUtils.parseText(date);
+            note.date = TimeUtils.parseText(date);
         }
+
         return note;
     }
 
@@ -191,7 +192,7 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, monthOfYear, dayOfMonth);
                 Date date = new Date(calendar.getTimeInMillis());
-                String text = DateFormatUtils.formatDate(date);
+                String text = TimeUtils.formatDate(date);
                 mTvDate.setText(text);
                 PickTimeIfCreateAlarm();
             }
@@ -217,22 +218,24 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
         timePickDialog.setOnTimePickListener(new OnTimePickListener() {
             @Override
             public void onTimePick(int hourOfDay, int minute) {
-                CharSequence text = mTvDate.getText();
-                Assert.assertNotNull(text);
-                String today = DateFormatUtils.formatDate(new Date());
-                //if the date is today,decide time has not passed
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
+                String dateStr = String.valueOf(mTvDate.getText());
+                Date date = TimeUtils.parseDate(dateStr);
+                Calendar tvCalendar = Calendar.getInstance();
+                tvCalendar.setTime(date);
 
-                if (TextUtils.equals(String.valueOf(text), today)) {
-                    if (calendar.getTimeInMillis() < System.currentTimeMillis() + 60000) {
+                boolean isToday = TimeUtils.isSameDay(tvCalendar, Calendar.getInstance());
+                //if the date is today,decide time has not passed
+                Calendar rightNow = Calendar.getInstance();
+                rightNow.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                rightNow.set(Calendar.MINUTE, minute);
+                if (isToday) {
+                    if (rightNow.getTimeInMillis() < System.currentTimeMillis() + 60000) {
                         //Alarm time over now less than one minute,choose time again
                         SingletonToastUtils.showToast(AddNoteActivity.this, "The time has passed");
                         pickTime();
                     }
                 }
-                String time = DateFormatUtils.formatTime(calendar.getTime());
+                String time = TimeUtils.formatTime(rightNow.getTime());
                 mTvTime.setText(time);
                 if (!isPicked) {
                     isPicked = true;
@@ -248,6 +251,7 @@ public class AddNoteActivity extends AppCompatActivity implements IAddNoteView {
         });
         timePickDialog.show(getFragmentManager(), TIME_PICK_DIALOG);
     }
+
 
     @Override
     public void showProcess() {

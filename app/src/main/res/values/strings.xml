@@ -99,4 +99,5 @@
     <string name="content_default">What is on your mind?</string>
     <string name="time_separator">:</string>
     <string name="date_separator">-</string>
+    <string name="title_activity_edit_note">EditNoteActivity</string>
 </resources>
