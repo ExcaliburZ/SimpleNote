@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,6 +23,7 @@ import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.INotesShowPresenter;
 import com.wings.simplenote.presenter.impl.NotesListPresenter;
 import com.wings.simplenote.receiver.AlarmReceiver;
+import com.wings.simplenote.utils.SingletonToastUtils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     //    private List<Note> mNoteList;
     private INotesShowPresenter mShowPresenter;
     private NotesAdapter mNotesAdapter;
+    private long[] mHits = new long[2];
 
 
     @Override
@@ -65,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         mShowPresenter = new NotesListPresenter(this, this);
         mShowPresenter.showNotesList();
         mNotesViews.setLayoutManager(mLinearLayoutManager);
+        mRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.green_cycle,
+                R.color.orange_cycle,
+                R.color.red_cycle);
         setListener();
     }
 
@@ -94,19 +103,15 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_settings:
+            case R.id.action_about:
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -165,10 +170,28 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
             case EDIT_NOTE_EVENT:
                 if (resultCode == EditNoteActivity.UPDATE_SUCCESS) {
                     mShowPresenter.showNotesList();
-                    Log.i(TAG, "onActivityResult: UPDATE_SUCCESS" + EditNoteActivity.UPDATE_SUCCESS);
                 }
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                //Google Multi Hit logic
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                mHits[mHits.length - 1] = SystemClock.uptimeMillis();
+
+                if (mHits[0] >= (SystemClock.uptimeMillis() - 2000)) {
+                    //between (SystemClock.uptimeMillis()- 2000) And SystemClock.uptimeMillis()
+                    finish();
+                } else {
+                    SingletonToastUtils.showToast(this, getString(R.string.double_click_exit));
+                }
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
