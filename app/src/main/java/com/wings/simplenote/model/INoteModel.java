@@ -12,7 +12,7 @@ public interface INoteModel {
 
     boolean updateNote(Note note);
 
-    void deleteNote(int id);
+    void deleteNote(Long id);
 
     List<Note> selectAll();
 

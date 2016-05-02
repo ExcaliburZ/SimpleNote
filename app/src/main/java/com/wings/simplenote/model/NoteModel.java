@@ -12,9 +12,9 @@ import com.wings.simplenote.BuildConfig;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.utils.TimeUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.wings.simplenote.model.NoteContract.FeedReaderContract.NoteEntry;
 
@@ -89,7 +89,7 @@ public class NoteModel implements INoteModel {
     }
 
     @Override
-    public void deleteNote(int id) {
+    public void deleteNote(Long id) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -120,7 +120,7 @@ public class NoteModel implements INoteModel {
                 null,                                     // don't filter by row groups
                 null                                 // The sort order
         );
-        List<Note> notes = new ArrayList<>();
+        List<Note> notes = new CopyOnWriteArrayList<>();
         if (cursor.getCount() == 0) {
             return notes;
         }

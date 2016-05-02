@@ -13,12 +13,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.adapter.NotesAdapter;
+import com.wings.simplenote.model.domain.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.INotesShowPresenter;
 import com.wings.simplenote.presenter.impl.NotesListPresenter;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     private static final String TAG = "MainActivity";
     public static final int ADD_NOTE_EVENT = 0;
     public static final int EDIT_NOTE_EVENT = 1;
+    private static final int MULTI_MODE = 1;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.content)
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     private INotesShowPresenter mShowPresenter;
     private NotesAdapter mNotesAdapter;
     private long[] mHits = new long[2];
+    private ActionMode.Callback mMultiMode;
+    private MultiSelector mSelector;
 
 
     @Override
@@ -120,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     @Override
     public void showNotes(List<Note> noteList) {
-        mNotesAdapter = new NotesAdapter(MainActivity.this, noteList);
+        mNotesAdapter = new NotesAdapter(MainActivity.this, noteList, new MultiSelector());
+//        mSelector = mNotesAdapter.getSelector();
         mNotesViews.setAdapter(mNotesAdapter);
     }
 
@@ -194,4 +200,5 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

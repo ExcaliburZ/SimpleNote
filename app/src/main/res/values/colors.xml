@@ -7,4 +7,6 @@
     <color name="green_cycle">#4CAF50</color>
     <color name="orange_cycle">#FF5722</color>
     <color name="red_cycle">#FF4081</color>
+    <color name="cardview_light_background">#FFFFFFFF</color>
+    <color name="cardview_select_background">#44121212</color>
 </resources>
