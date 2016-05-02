@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="@dimen/space_large"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/space_middle"
+        app:cardCornerRadius="@dimen/corner_size">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/ic_avater" />
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:gravity="center_horizontal"
+        android:text="@string/simple_note" />
+
+    <TextView
+        android:id="@+id/copyright"
+        style="@style/Base.TextAppearance.AppCompat.Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:gravity="center_horizontal"
+        android:text="@string/copyright_by_wing" />
+
+    <TextView
+        android:id="@+id/content"
+        style="@style/Base.TextAppearance.AppCompat.Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/copyright"
+        android:layout_marginTop="@dimen/space_large"
+        android:gravity="center_horizontal"
+        android:text="@string/resume" />
+
+    <TextView
+        android:id="@+id/open_source"
+        style="@style/Base.TextAppearance.AppCompat.Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/content"
+        android:layout_marginBottom="@dimen/space_middle"
+        android:layout_marginTop="@dimen/text_margin"
+        android:autoLink="web"
+        android:gravity="center_horizontal"
+        android:text="@string/address" />
+</RelativeLayout>

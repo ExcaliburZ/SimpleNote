@@ -21,6 +21,7 @@ import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.INotesShowPresenter;
 import com.wings.simplenote.presenter.impl.NotesListPresenter;
 import com.wings.simplenote.utils.SingletonToastUtils;
+import com.wings.simplenote.view.fragment.AboutFragment;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     public static final int ADD_NOTE_EVENT = 0;
     public static final int EDIT_NOTE_EVENT = 1;
     private static final int MULTI_MODE = 1;
+    private static final String ABOUT_FRAGMENT = "ABOUT_FRAGMENT";
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.content)
@@ -92,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         int id = item.getItemId();
         switch (id) {
             case R.id.action_about:
+                AboutFragment aboutFragment = new AboutFragment();
+                aboutFragment.show(getFragmentManager(),ABOUT_FRAGMENT);
                 break;
         }
         return super.onOptionsItemSelected(item);

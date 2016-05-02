@@ -13,4 +13,8 @@
     <dimen name="note_item_height">80dp</dimen>
     <dimen name="title_size">20sp</dimen>
     <dimen name="cardview_select_elevation">10dp</dimen>
+    <dimen name="icon_size">100dp</dimen>
+    <dimen name="corner_size">50dp</dimen>
+    <dimen name="space_large">50dp</dimen>
+    <dimen name="space_middle">20dp</dimen>
 </resources>

@@ -110,4 +110,8 @@
     <string name="all_notes">All Notes</string>
     <string name="add_note_fragment">add_note_fragment</string>
     <string name="double_click_exit">click again to exit app</string>
+    <string name="simple_note">Simple Note</string>
+    <string name="copyright_by_wing">copyright by wing</string>
+    <string name="resume">The Normal Practice for MVP and Material Design : )</string>
+    <string name="address">Welcome to Star and Fork on Github \nhttps://github.com/ExcaliburZ/SimpleNote</string>
 </resources>
