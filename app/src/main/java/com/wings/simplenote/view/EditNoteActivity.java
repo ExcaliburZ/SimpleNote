@@ -1,5 +1,6 @@
 package com.wings.simplenote.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     private EditNoteActivityFragment mNoteFragment;
     private Note mNoteItem;
     private IUpdateNotePresenter mUpdateNotePresenter;
+    private Note note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mNoteFragment.setTitleText(mNoteItem.title);
         mNoteFragment.setContentText(mNoteItem.content);
+        mNoteFragment.setItemID(mNoteItem.id);
         boolean hasAlarm = mNoteItem.hasAlarm;
         if (hasAlarm) {
             mNoteFragment.setPicked(true);
@@ -64,11 +67,15 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_update:
-                if (mNoteFragment.confirmNoteComplete()) {
-                    Note note = mNoteFragment.getNote(false, mNoteItem.id);
-                    mUpdateNotePresenter.updateNote(note);
-                }
+                updateNote();
                 break;
+        }
+    }
+
+    private void updateNote() {
+        if (mNoteFragment.confirmNoteComplete()) {
+            note = mNoteFragment.getNote(false, mNoteItem.id);
+            mUpdateNotePresenter.updateNote(note);
         }
     }
 
@@ -85,7 +92,9 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     @Override
     public void showSuccessRemind() {
         SingletonToastUtils.showToast(this, "update success");
-        setResult(UPDATE_SUCCESS);
+        Intent data = new Intent();
+        data.putExtra("edit", note);
+        setResult(UPDATE_SUCCESS, data);
         finish();
     }
 

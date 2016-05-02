@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -42,7 +41,7 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
     @Bind(R.id.edit)
     FloatingActionButton mEdit;
     private Note mNoteItem;
-    private INoteDetailPresenter mNoteDetaulPresenter;
+    private INoteDetailPresenter mNoteDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +75,16 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
             String timeStr = TimeUtils.formatTime(date);
             mTvTime.setText(timeStr);
             mTvTime.setVisibility(View.VISIBLE);
+        } else {
+            mCbAlarm.setChecked(false);
+            mTvDate.setVisibility(View.INVISIBLE);
+            mTvTime.setVisibility(View.INVISIBLE);
         }
     }
 
     private void initDate() {
         mNoteItem = (Note) getIntent().getSerializableExtra("note");
-        mNoteDetaulPresenter = new NoteDetailPresenter(this, this);
+        mNoteDetailPresenter = new NoteDetailPresenter(this, this);
     }
 
     @OnClick(R.id.edit)
@@ -97,10 +100,10 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
         switch (resultCode) {
             case EditNoteActivity.UPDATE_SUCCESS:
                 setResult(EditNoteActivity.UPDATE_SUCCESS);
-                mNoteDetaulPresenter.getNote(mNoteItem.id);
+                Note edit = (Note) data.getSerializableExtra("edit");
+                setViews(edit);
                 break;
             case EditNoteActivity.UPDATE_FAILED:
-                Log.i(TAG, "onActivityResult: failed");
                 break;
         }
     }

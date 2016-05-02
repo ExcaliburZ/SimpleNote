@@ -20,7 +20,7 @@ import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.impl.DeleteNotePresenter;
-import com.wings.simplenote.presenter.impl.IDeleteNotePresenter;
+import com.wings.simplenote.presenter.IDeleteNotePresenter;
 import com.wings.simplenote.utils.TimeUtils;
 import com.wings.simplenote.view.MainActivity;
 import com.wings.simplenote.view.NoteDetailActivity;

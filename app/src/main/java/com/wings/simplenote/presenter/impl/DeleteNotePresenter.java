@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.wings.simplenote.model.INoteModel;
 import com.wings.simplenote.model.NoteModel;
+import com.wings.simplenote.presenter.IDeleteNotePresenter;
 
 /**
  * Created by wing on 2016/4/29.

@@ -1,26 +1,44 @@
 package com.wings.simplenote.receiver;
 
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.AlarmClock;
 import android.util.Log;
+
+import com.wings.simplenote.R;
+import com.wings.simplenote.view.MainActivity;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "AlarmReceiver";
-    private Notification notification;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "AlarmReceiver");
-        Intent alarm = new Intent(AlarmClock.ACTION_SET_ALARM);
-        alarm.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Calendar now = GregorianCalendar.getInstance();
+        Notification.Builder mBuilder =
+                new Notification.Builder(context)
+                        .setSound(android.provider.Settings.System.DEFAULT_NOTIFICATION_URI)
+                        .setSmallIcon(R.mipmap.ic_launcher_transparent)
+                        .setContentTitle(intent.getStringExtra("title"))
+                        .setContentText(intent.getStringExtra("content"));
+        Log.i(TAG, "onReceive: intent" + intent.getClass().getName());
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
 
-        alarm.putExtra(AlarmClock.EXTRA_HOUR, 23);
-        alarm.putExtra(AlarmClock.EXTRA_MINUTES, 50);
-        alarm.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
-        context.startActivity(intent);
+        NotificationManager mNotificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, mBuilder.build());
     }
 
 }

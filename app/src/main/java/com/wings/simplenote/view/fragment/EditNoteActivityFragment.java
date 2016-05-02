@@ -1,9 +1,13 @@
 package com.wings.simplenote.view.fragment;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import com.wings.simplenote.R;
 import com.wings.simplenote.listener.OnDatePickListener;
 import com.wings.simplenote.listener.OnTimePickListener;
 import com.wings.simplenote.model.domain.Note;
+import com.wings.simplenote.receiver.AlarmReceiver;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
 
@@ -33,7 +38,7 @@ import butterknife.OnClick;
  * A placeholder fragment containing a simple view.
  */
 public class EditNoteActivityFragment extends Fragment {
-    private static final String TAG = "EditNoteActivityFragment";
+    private static final String TAG = "EditNoteActivity";
     private static final String TIME_PICK_DIALOG = "TimePickerFragment";
     private static final String DATE_PICK_DIALOG = "DatePickerFragment";
     @Bind(R.id.et_title)
@@ -47,6 +52,15 @@ public class EditNoteActivityFragment extends Fragment {
     @Bind(R.id.et_content)
     EditText mEtContent;
     private boolean isPicked = false;
+    private PendingIntent alarmIntent;
+    private AlarmManager alarmMgr;
+    private Intent mIntent;
+
+    public void setItemID(Long itemID) {
+        this.mItemID = itemID;
+    }
+
+    private long mItemID = -1L;
 
     public void setPicked(boolean picked) {
         isPicked = picked;
@@ -61,6 +75,8 @@ public class EditNoteActivityFragment extends Fragment {
         View FragmentView = inflater.inflate(R.layout.fragment_edit_note, container, false);
         ButterKnife.bind(this, FragmentView);
         initView();
+        alarmMgr = (AlarmManager) getActivity().
+                getSystemService(Context.ALARM_SERVICE);
         return FragmentView;
     }
 
@@ -86,11 +102,22 @@ public class EditNoteActivityFragment extends Fragment {
     private void hideDateTimeViews() {
         mTvDate.setVisibility(View.INVISIBLE);
         mTvTime.setVisibility(View.INVISIBLE);
+        // If the alarm has been set, cancel it.
+        if (alarmMgr != null) {
+            if (alarmIntent == null && mItemID != -1L) {
+                mIntent = new Intent(getActivity(), AlarmReceiver.class);
+                alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) mItemID, mIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+            }
+            Log.i(TAG, "hide...hide.hide...hide..hide");
+            alarmMgr.cancel(alarmIntent);
+        }
     }
 
     private void showDateTimeViews() {
         mTvDate.setVisibility(View.VISIBLE);
         mTvTime.setVisibility(View.VISIBLE);
+
     }
 
     private void toggleSoftKeyboard() {
@@ -111,6 +138,7 @@ public class EditNoteActivityFragment extends Fragment {
         note.hasAlarm = mCbAlarm.isChecked();
         if (isAddNoted) {
             note.createDate = new Date();
+            note.id = System.currentTimeMillis();
         } else {
             note.id = id;
         }
@@ -120,7 +148,9 @@ public class EditNoteActivityFragment extends Fragment {
         if (!TextUtils.isEmpty(date.trim())) {
             note.date = TimeUtils.parseText(date);
         }
-
+        if (note.hasAlarm) {
+            addReminder(note.date, note);
+        }
         return note;
     }
 
@@ -240,6 +270,15 @@ public class EditNoteActivityFragment extends Fragment {
                 pickTime();
                 break;
         }
+    }
+
+    private void addReminder(Date date, Note item) {
+        mIntent = new Intent(getActivity(), AlarmReceiver.class);
+        mIntent.putExtra("title", item.title);
+        mIntent.putExtra("content", item.content);
+        alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) item.id, mIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, date.getTime(), alarmIntent);
     }
 
     public void setTitleText(String title) {

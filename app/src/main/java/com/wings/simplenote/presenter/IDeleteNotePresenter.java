@@ -1,4 +1,4 @@
-package com.wings.simplenote.presenter.impl;
+package com.wings.simplenote.presenter;
 
 /**
  * Created by wing on 2016/5/2.

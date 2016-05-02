@@ -1,18 +1,14 @@
 package com.wings.simplenote.view;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -24,10 +20,8 @@ import com.wings.simplenote.model.domain.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.INotesShowPresenter;
 import com.wings.simplenote.presenter.impl.NotesListPresenter;
-import com.wings.simplenote.receiver.AlarmReceiver;
 import com.wings.simplenote.utils.SingletonToastUtils;
 
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
@@ -85,25 +79,6 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     private void setListener() {
         mRefreshLayout.setOnRefreshListener(this);
-    }
-
-    private void addAlarm() {
-        Log.i(TAG, "addAlarm");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 5);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-
-        Intent alarm = new Intent(AlarmClock.ACTION_SET_ALARM);
-
-        alarm.putExtra(AlarmClock.EXTRA_HOUR, 23);
-        alarm.putExtra(AlarmClock.EXTRA_MINUTES, calendar.get(Calendar.MINUTE) + 1);
-        alarm.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent clockIntent = PendingIntent.getActivity(this, 0, alarm, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), clockIntent);
     }
 
     @Override
