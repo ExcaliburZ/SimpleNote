@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.adapter.NotesAdapter;
+import com.wings.simplenote.config.DividerItemDecoration;
 import com.wings.simplenote.model.domain.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.INotesShowPresenter;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         mShowPresenter = new NotesListPresenter(this, this);
         mShowPresenter.showNotesList();
         mNotesViews.setLayoutManager(mLinearLayoutManager);
+        mNotesViews.addItemDecoration(
+                new DividerItemDecoration(this, null));
         mRefreshLayout.setColorSchemeResources(
                 R.color.colorPrimary,
                 R.color.green_cycle,
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         switch (id) {
             case R.id.action_about:
                 AboutFragment aboutFragment = new AboutFragment();
-                aboutFragment.show(getFragmentManager(),ABOUT_FRAGMENT);
+                aboutFragment.show(getFragmentManager(), ABOUT_FRAGMENT);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,5 +1,5 @@
 #极简笔记  
-[English version](readme.md)
+[English version](readme-en.md)
 ###MVP和Material Design的一般实践.![](http://ww1.sinaimg.cn/large/b26fc81fgw1f3h7mucz7vg200m00m741.gif)  
 
 ##简介
