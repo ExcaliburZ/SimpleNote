@@ -18,19 +18,42 @@ public class TimeUtils {
     private static final SimpleDateFormat mSimpleTextFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
+    /**
+     * Format DateTime to String
+     *
+     * @param date (yyyy-MM-dd HH:mm:ss)
+     * @return
+     */
     public static String formatDateTime(Date date) {
         return mSimpleDateTimeFormat.format(date);
     }
 
+    /**
+     * Format Date to String
+     *
+     * @param date (yyyy-MM-dd)
+     * @return
+     */
     public static String formatDate(Date date) {
         return mSimpleDateFormat.format(date);
     }
 
+    /**
+     * Format Time to String
+     *
+     * @param date (HH:mm)
+     * @return
+     */
     public static String formatTime(Date date) {
         return mSimpleTimeFormat.format(date);
     }
 
-
+    /**
+     * parse String to DateTime
+     *
+     * @param dateStr (yyyy-MM-dd HH:mm:ss)
+     * @return
+     */
     public static Date parse(String dateStr) {
         try {
             return mSimpleDateTimeFormat.parse(dateStr);
@@ -40,6 +63,12 @@ public class TimeUtils {
         }
     }
 
+    /**
+     * parse String to DateTime
+     *
+     * @param dateStr (yyyy-MM-dd HH:mm)
+     * @return
+     */
     public static Date parseText(String dateStr) {
         try {
             return mSimpleTextFormat.parse(dateStr);
@@ -49,6 +78,12 @@ public class TimeUtils {
         }
     }
 
+    /**
+     * parse String to Time
+     *
+     * @param dateStr (HH:mm)
+     * @return
+     */
     public static Date parseTime(String dateStr) {
         try {
             return mSimpleTimeFormat.parse(dateStr);
@@ -58,6 +93,12 @@ public class TimeUtils {
         }
     }
 
+    /**
+     * parse String to Date
+     *
+     * @param dateStr (yyyy-MM-dd)
+     * @return
+     */
     public static Date parseDate(String dateStr) {
         try {
             return mSimpleDateFormat.parse(dateStr);
@@ -66,7 +107,10 @@ public class TimeUtils {
             throw new RuntimeException("date formatDateTime error");
         }
     }
-
+    /**
+     * determine the two calendar whether the same day
+     * @return true is the same day ,false else.
+     */
     public static boolean isSameDay(Calendar tvCalendar, Calendar today) {
         return tvCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
                 && tvCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH)

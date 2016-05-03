@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by wing on 2016/4/12.
+ * NoteModel Interface
  */
 public interface INoteModel {
     boolean addNote(Note note);

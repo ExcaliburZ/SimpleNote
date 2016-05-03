@@ -1,9 +1,6 @@
 package com.wings.simplenote.view;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +12,9 @@ import com.wings.simplenote.listener.OnConfirmListener;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.IAddNotePresenter;
 import com.wings.simplenote.presenter.impl.AddNotePresenter;
-import com.wings.simplenote.receiver.AlarmReceiver;
 import com.wings.simplenote.utils.SingletonToastUtils;
-import com.wings.simplenote.view.fragment.EditNoteActivityFragment;
+import com.wings.simplenote.view.fragment.EditNoteFragment;
 import com.wings.simplenote.view.fragment.TrashConfirmFragment;
-
-import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,7 +32,7 @@ public class AddNoteActivity extends AppCompatActivity implements INoteView {
     ImageButton mIbSave;
     @Bind(R.id.ib_trash)
     ImageButton mIbTrash;
-    private EditNoteActivityFragment mNoteFragment;
+    private EditNoteFragment mNoteFragment;
     private PendingIntent alarmIntent;
 
 
@@ -52,7 +46,7 @@ public class AddNoteActivity extends AppCompatActivity implements INoteView {
     }
 
     private void initData() {
-        mNoteFragment = (EditNoteActivityFragment)
+        mNoteFragment = (EditNoteFragment)
                 getFragmentManager().findFragmentByTag(getString(R.string.add_note_fragment));
     }
 
@@ -81,15 +75,6 @@ public class AddNoteActivity extends AppCompatActivity implements INoteView {
             IAddNotePresenter presenter = new AddNotePresenter(this, this);
             presenter.saveNote(note);
         }
-    }
-
-    private void addReminder(Date date, Note note) {
-        AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("title", note.title);
-        intent.putExtra("content", note.content);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, date.getTime(), alarmIntent);
     }
 
     private void confirmTrash() {

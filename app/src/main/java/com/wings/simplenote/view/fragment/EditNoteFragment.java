@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +34,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment Has Note Content ,use in AddNoteActivity and EditNoteActivity.
  */
-public class EditNoteActivityFragment extends Fragment {
+public class EditNoteFragment extends Fragment {
     private static final String TAG = "EditNoteActivity";
-    private static final String TIME_PICK_DIALOG = "TimePickerFragment";
-    private static final String DATE_PICK_DIALOG = "DatePickerFragment";
+    private static final String TIME_PICK_DIALOG = "TimePickerDialog";
+    private static final String DATE_PICK_DIALOG = "DatePickerDialog";
     @Bind(R.id.et_title)
     EditText mEtTitle;
     @Bind(R.id.tv_date)
@@ -66,7 +65,7 @@ public class EditNoteActivityFragment extends Fragment {
         isPicked = picked;
     }
 
-    public EditNoteActivityFragment() {
+    public EditNoteFragment() {
     }
 
     @Override
@@ -74,9 +73,9 @@ public class EditNoteActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View FragmentView = inflater.inflate(R.layout.fragment_edit_note, container, false);
         ButterKnife.bind(this, FragmentView);
-        initView();
         alarmMgr = (AlarmManager) getActivity().
                 getSystemService(Context.ALARM_SERVICE);
+        initView();
         return FragmentView;
     }
 
@@ -103,21 +102,22 @@ public class EditNoteActivityFragment extends Fragment {
         mTvDate.setVisibility(View.INVISIBLE);
         mTvTime.setVisibility(View.INVISIBLE);
         // If the alarm has been set, cancel it.
-        if (alarmMgr != null) {
-            if (alarmIntent == null && mItemID != -1L) {
-                mIntent = new Intent(getActivity(), AlarmReceiver.class);
-                alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) mItemID, mIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-            }
-            Log.i(TAG, "hide...hide.hide...hide..hide");
-            alarmMgr.cancel(alarmIntent);
+        cancelReminder();
+    }
+
+    private void cancelReminder() {
+        if (alarmIntent == null && mItemID != -1L) {
+            //not add note
+            mIntent = new Intent(getActivity(), AlarmReceiver.class);
+            alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) mItemID, mIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
         }
+        alarmMgr.cancel(alarmIntent);
     }
 
     private void showDateTimeViews() {
         mTvDate.setVisibility(View.VISIBLE);
         mTvTime.setVisibility(View.VISIBLE);
-
     }
 
     private void toggleSoftKeyboard() {
@@ -143,14 +143,17 @@ public class EditNoteActivityFragment extends Fragment {
             note.id = id;
         }
         note.date = new Date();
+
         String date = String.valueOf(mTvDate.getText()) + " " +
                 String.valueOf(mTvTime.getText());
         if (!TextUtils.isEmpty(date.trim())) {
             note.date = TimeUtils.parseText(date);
         }
+
         if (note.hasAlarm) {
             addReminder(note.date, note);
         }
+
         return note;
     }
 
@@ -231,16 +234,20 @@ public class EditNoteActivityFragment extends Fragment {
                 rightNow.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 rightNow.set(Calendar.MINUTE, minute);
                 if (isToday) {
-                    if (rightNow.getTimeInMillis() < System.currentTimeMillis() + 60000) {
-                        //Alarm time over now less than one minute,choose time again
-                        SingletonToastUtils.showToast(getActivity(), "The time has passed");
-                        pickTime();
-                    }
+                    confirmTimePast(rightNow);
                 }
                 String time = TimeUtils.formatTime(rightNow.getTime());
                 mTvTime.setText(time);
                 if (!isPicked) {
                     isPicked = true;
+                }
+            }
+
+            private void confirmTimePast(Calendar rightNow) {
+                if (rightNow.getTimeInMillis() < System.currentTimeMillis() + 60000) {
+                    //Alarm time over now less than one minute,choose time again
+                    SingletonToastUtils.showToast(getActivity(), "The time has passed");
+                    pickTime();
                 }
             }
 

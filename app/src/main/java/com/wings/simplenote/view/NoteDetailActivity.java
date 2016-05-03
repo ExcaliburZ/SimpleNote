@@ -22,6 +22,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * The Activity to show the note detail.
+ */
 public class NoteDetailActivity extends AppCompatActivity implements INoteUpdateView {
 
     private static final String TAG = "NoteDetailActivity";

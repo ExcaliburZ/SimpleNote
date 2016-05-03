@@ -30,13 +30,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * The Main Interface to show the notes list.
+ */
 public class MainActivity extends AppCompatActivity implements INotesShowView,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
     public static final int ADD_NOTE_EVENT = 0;
     public static final int EDIT_NOTE_EVENT = 1;
-    private static final int MULTI_MODE = 1;
     private static final String ABOUT_FRAGMENT = "ABOUT_FRAGMENT";
     @Bind(R.id.toolbar)
     Toolbar mToolbar;

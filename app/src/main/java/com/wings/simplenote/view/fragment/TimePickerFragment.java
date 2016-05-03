@@ -13,7 +13,9 @@ import com.wings.simplenote.listener.OnTimePickListener;
 
 import java.util.Calendar;
 
-
+/**
+ * DialogFragment to pick time.
+ */
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "TimePickerFragment";

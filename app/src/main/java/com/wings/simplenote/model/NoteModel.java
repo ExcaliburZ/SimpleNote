@@ -20,6 +20,7 @@ import static com.wings.simplenote.model.NoteContract.FeedReaderContract.NoteEnt
 
 /**
  * Created by wing on 2016/4/13.
+ * The Model Implement.
  */
 public class NoteModel implements INoteModel {
 

@@ -14,7 +14,9 @@ import com.wings.simplenote.view.MainActivity;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+/**
+ * The receiver for reminder function.
+* */
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "AlarmReceiver";
 

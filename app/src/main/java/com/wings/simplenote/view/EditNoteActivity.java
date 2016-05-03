@@ -13,12 +13,15 @@ import com.wings.simplenote.presenter.IUpdateNotePresenter;
 import com.wings.simplenote.presenter.impl.UpdateNotePresenter;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
-import com.wings.simplenote.view.fragment.EditNoteActivityFragment;
+import com.wings.simplenote.view.fragment.EditNoteFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * EditNoteActivity ,contain EditNoteFragment and Toolbar.
+ */
 public class EditNoteActivity extends AppCompatActivity implements INoteView {
 
     public static final int UPDATE_SUCCESS = 1;
@@ -27,7 +30,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     ImageButton mIbUpdate;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    private EditNoteActivityFragment mNoteFragment;
+    private EditNoteFragment mNoteFragment;
     private Note mNoteItem;
     private IUpdateNotePresenter mUpdateNotePresenter;
     private Note note;
@@ -43,7 +46,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
 
     private void initData() {
         mNoteItem = (Note) getIntent().getSerializableExtra("note");
-        mNoteFragment = (EditNoteActivityFragment)
+        mNoteFragment = (EditNoteFragment)
                 getFragmentManager().findFragmentByTag(getString(R.string.edit_notes_fragment));
         mUpdateNotePresenter = new UpdateNotePresenter(this, this);
     }

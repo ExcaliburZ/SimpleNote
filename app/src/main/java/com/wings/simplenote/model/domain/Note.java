@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * Created by wing on 2016/4/12.
+ * The entity of NoteItem.
  */
 public class Note implements Serializable {
     public long id;

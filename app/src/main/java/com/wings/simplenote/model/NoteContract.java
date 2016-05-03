@@ -4,6 +4,7 @@ import android.provider.BaseColumns;
 
 /**
  * Created by wing on 2016/4/15.
+ * Contract to create Note table
  */
 public class NoteContract {
     public static final class FeedReaderContract {

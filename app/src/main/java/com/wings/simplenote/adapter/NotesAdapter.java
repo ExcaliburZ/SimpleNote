@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.impl.DeleteNotePresenter;
 import com.wings.simplenote.presenter.IDeleteNotePresenter;
+import com.wings.simplenote.presenter.impl.DeleteNotePresenter;
 import com.wings.simplenote.utils.TimeUtils;
 import com.wings.simplenote.view.MainActivity;
 import com.wings.simplenote.view.NoteDetailActivity;
@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * Created by wing on 2016/4/19.
+ * Adapter For List Notes,support choice mode.
  */
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private static final String TAG = "NotesAdapter";
@@ -99,7 +100,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         this.mSelector = mSelectedList;
     }
 
-    public void setSelectable(Boolean isSelectable) {
+    private void setSelectable(Boolean isSelectable) {
         mSelector.setSelectable(isSelectable);
         this.notifyDataSetChanged();
     }

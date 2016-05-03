@@ -8,7 +8,9 @@ import android.support.v7.app.AlertDialog;
 
 import com.wings.simplenote.R;
 
-
+/**
+ * A Fragment is show me.
+ */
 public class AboutFragment extends DialogFragment {
 
     @Override

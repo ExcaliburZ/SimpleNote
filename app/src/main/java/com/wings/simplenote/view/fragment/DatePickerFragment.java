@@ -13,7 +13,9 @@ import com.wings.simplenote.listener.OnDatePickListener;
 
 import java.util.Calendar;
 
-
+/**
+ * DialogFragment to pick date.
+ */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     private static final String TAG = "DatePickerFragment";
     private OnDatePickListener mOnDatePickListener;

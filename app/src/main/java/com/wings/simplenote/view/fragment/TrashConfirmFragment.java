@@ -9,7 +9,9 @@ import android.os.Bundle;
 
 import com.wings.simplenote.listener.OnConfirmListener;
 
-
+/**
+ * DialogFragment to confirm whether trash.
+ */
 public class TrashConfirmFragment extends DialogFragment
         implements DialogInterface.OnClickListener {
     private static final String TAG = "TrashConfirmFragment";
