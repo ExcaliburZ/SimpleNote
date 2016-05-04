@@ -1,4 +1,4 @@
-package com.wings.simplenote.model.domain;
+package com.wings.simplenote.config;
 
 import java.util.HashSet;
 import java.util.Set;

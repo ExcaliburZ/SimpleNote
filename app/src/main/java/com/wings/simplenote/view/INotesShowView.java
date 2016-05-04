@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Created by wing on 2016/4/20.
- * the view interface for INotesShowPresenter
+ * the view interface for IListNotesPresenter
  */
 public interface INotesShowView {
 

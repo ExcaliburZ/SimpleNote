@@ -14,11 +14,11 @@ import com.wings.simplenote.view.INoteView;
  */
 public class UpdateNotePresenter implements IUpdateNotePresenter {
     private INoteModel mNoteModel;
-    private INoteView mAddNoteView;
+    private INoteView mUpdateNoteView;
 
     public UpdateNotePresenter(Context context, INoteView iNoteView) {
         this.mNoteModel = new NoteModel(context);
-        this.mAddNoteView = iNoteView;
+        this.mUpdateNoteView = iNoteView;
     }
 
 
@@ -31,7 +31,7 @@ public class UpdateNotePresenter implements IUpdateNotePresenter {
 
         @Override
         protected void onPreExecute() {
-            mAddNoteView.showProcess();
+            mUpdateNoteView.showProcess();
         }
 
         @Override
@@ -42,9 +42,9 @@ public class UpdateNotePresenter implements IUpdateNotePresenter {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if (aBoolean) {
-                mAddNoteView.showSuccessRemind();
+                mUpdateNoteView.showSuccessRemind();
             } else {
-                mAddNoteView.showFailureRemind();
+                mUpdateNoteView.showFailureRemind();
             }
         }
     }

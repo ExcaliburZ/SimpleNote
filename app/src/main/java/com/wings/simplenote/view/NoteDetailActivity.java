@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wings.simplenote.R;
@@ -43,6 +44,8 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
     TextView mEtContent;
     @Bind(R.id.edit)
     FloatingActionButton mEdit;
+    @Bind(R.id.load)
+    ProgressBar mLoadProgessBar;
     private Note mNoteItem;
     private INoteDetailPresenter mNoteDetailPresenter;
 
@@ -60,7 +63,6 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         updateViews(mNoteItem);
     }
 
@@ -83,6 +85,7 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
             mTvDate.setVisibility(View.INVISIBLE);
             mTvTime.setVisibility(View.INVISIBLE);
         }
+        dismissProcess();
     }
 
     private void initDate() {
@@ -103,6 +106,7 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
         switch (resultCode) {
             case EditNoteActivity.UPDATE_SUCCESS:
                 setResult(EditNoteActivity.UPDATE_SUCCESS);
+                showProcess();
                 Note edit = (Note) data.getSerializableExtra("edit");
                 setViews(edit);
                 break;
@@ -113,12 +117,12 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
 
     @Override
     public void showProcess() {
-
+        mLoadProgessBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void dismissProcess() {
-
+        mLoadProgessBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

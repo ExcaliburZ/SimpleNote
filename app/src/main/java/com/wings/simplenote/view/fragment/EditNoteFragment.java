@@ -20,7 +20,7 @@ import com.wings.simplenote.R;
 import com.wings.simplenote.listener.OnDatePickListener;
 import com.wings.simplenote.listener.OnTimePickListener;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.receiver.AlarmReceiver;
+import com.wings.simplenote.receiver.ReminderReceiver;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
 
@@ -108,7 +108,7 @@ public class EditNoteFragment extends Fragment {
     private void cancelReminder() {
         if (alarmIntent == null && mItemID != -1L) {
             //not add note
-            mIntent = new Intent(getActivity(), AlarmReceiver.class);
+            mIntent = new Intent(getActivity(), ReminderReceiver.class);
             alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) mItemID, mIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
         }
@@ -280,7 +280,7 @@ public class EditNoteFragment extends Fragment {
     }
 
     private void addReminder(Date date, Note item) {
-        mIntent = new Intent(getActivity(), AlarmReceiver.class);
+        mIntent = new Intent(getActivity(), ReminderReceiver.class);
         mIntent.putExtra("title", item.title);
         mIntent.putExtra("content", item.content);
         alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) item.id, mIntent,

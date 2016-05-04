@@ -17,12 +17,12 @@ import java.util.GregorianCalendar;
 /**
  * The receiver for reminder function.
 * */
-public class AlarmReceiver extends BroadcastReceiver {
-    private static final String TAG = "AlarmReceiver";
+public class ReminderReceiver extends BroadcastReceiver {
+    private static final String TAG = "ReminderReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "AlarmReceiver");
+        Log.i(TAG, "ReminderReceiver");
         Calendar now = GregorianCalendar.getInstance();
         Notification.Builder mBuilder =
                 new Notification.Builder(context)

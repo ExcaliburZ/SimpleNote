@@ -17,10 +17,10 @@ import android.view.MenuItem;
 import com.wings.simplenote.R;
 import com.wings.simplenote.adapter.NotesAdapter;
 import com.wings.simplenote.config.DividerItemDecoration;
-import com.wings.simplenote.model.domain.MultiSelector;
+import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.INotesShowPresenter;
-import com.wings.simplenote.presenter.impl.NotesListPresenter;
+import com.wings.simplenote.presenter.IListNotesPresenter;
+import com.wings.simplenote.presenter.impl.ListNotesPresenter;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.view.fragment.AboutFragment;
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     FloatingActionButton mAddNoteButton;
 
     //    private List<Note> mNoteList;
-    private INotesShowPresenter mShowPresenter;
+    private IListNotesPresenter mShowPresenter;
     private NotesAdapter mNotesAdapter;
     private long[] mHits = new long[2];
     private ActionMode.Callback mMultiMode;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         getSupportActionBar().setTitle(R.string.all_notes);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager
                 (MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        mShowPresenter = new NotesListPresenter(this, this);
+        mShowPresenter = new ListNotesPresenter(this, this);
         mShowPresenter.showNotesList();
         mNotesViews.setLayoutManager(mLinearLayoutManager);
         mNotesViews.addItemDecoration(

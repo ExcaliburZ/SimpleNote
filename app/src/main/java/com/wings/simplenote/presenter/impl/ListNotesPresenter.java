@@ -7,7 +7,7 @@ import android.os.SystemClock;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.model.INoteModel;
 import com.wings.simplenote.model.NoteModel;
-import com.wings.simplenote.presenter.INotesShowPresenter;
+import com.wings.simplenote.presenter.IListNotesPresenter;
 import com.wings.simplenote.view.INotesShowView;
 
 import java.util.List;
@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * Created by wing on 2016/4/20.
  */
-public class NotesListPresenter implements INotesShowPresenter {
+public class ListNotesPresenter implements IListNotesPresenter {
     private INotesShowView notesShowView;
     private INoteModel noteModel;
 
-    public NotesListPresenter(Context context,INotesShowView notesShowView) {
+    public ListNotesPresenter(Context context, INotesShowView notesShowView) {
         this.notesShowView = notesShowView;
         noteModel = new NoteModel(context);
     }

@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.wings.simplenote.R;
-import com.wings.simplenote.model.domain.MultiSelector;
+import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.presenter.IDeleteNotePresenter;
 import com.wings.simplenote.presenter.impl.DeleteNotePresenter;
