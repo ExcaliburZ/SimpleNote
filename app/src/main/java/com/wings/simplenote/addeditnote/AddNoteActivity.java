@@ -1,4 +1,4 @@
-package com.wings.simplenote.view;
+package com.wings.simplenote.addeditnote;
 
 import android.app.PendingIntent;
 import android.os.Bundle;
@@ -11,18 +11,15 @@ import android.view.View;
 import com.wings.simplenote.R;
 import com.wings.simplenote.listener.OnConfirmListener;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.IAddNotePresenter;
-import com.wings.simplenote.presenter.impl.AddNotePresenter;
 import com.wings.simplenote.utils.SingletonToastUtils;
-import com.wings.simplenote.view.fragment.EditNoteFragment;
-import com.wings.simplenote.view.fragment.TrashConfirmFragment;
+import com.wings.simplenote.view.dialogfragment.TrashConfirmFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class AddNoteActivity extends AppCompatActivity implements INoteView {
+public class AddNoteActivity extends AppCompatActivity implements AddEditNoteContract.View {
 
     private static final String TAG = "AddNoteActivity";
     private static final String TRASH_CONFIRM_FRAGMENT = "TrashConfirmFragment";
@@ -84,8 +81,7 @@ public class AddNoteActivity extends AppCompatActivity implements INoteView {
     private void saveNote() {
         if (mNoteFragment.confirmNoteComplete()) {
             Note note = mNoteFragment.getNote(true, 0);
-            IAddNotePresenter presenter = new AddNotePresenter(this, this);
-            presenter.saveNote(note);
+            new AddEditNotePresenter(this, this).saveNote(note);
         }
     }
 

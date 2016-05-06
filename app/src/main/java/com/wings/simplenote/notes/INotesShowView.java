@@ -1,4 +1,4 @@
-package com.wings.simplenote.view;
+package com.wings.simplenote.notes;
 
 import com.wings.simplenote.model.domain.Note;
 

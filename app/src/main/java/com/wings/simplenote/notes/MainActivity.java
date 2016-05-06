@@ -1,4 +1,4 @@
-package com.wings.simplenote.view;
+package com.wings.simplenote.notes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.wings.simplenote.R;
-import com.wings.simplenote.adapter.NotesAdapter;
+import com.wings.simplenote.notes.adapter.NotesAdapter;
+import com.wings.simplenote.addeditnote.AddNoteActivity;
+import com.wings.simplenote.addeditnote.EditNoteActivity;
 import com.wings.simplenote.config.DividerItemDecoration;
 import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.IListNotesPresenter;
-import com.wings.simplenote.presenter.impl.ListNotesPresenter;
 import com.wings.simplenote.utils.SingletonToastUtils;
-import com.wings.simplenote.view.fragment.AboutFragment;
+import com.wings.simplenote.view.dialogfragment.AboutFragment;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ import butterknife.OnClick;
 /**
  * The Main Interface to show the notes list.
  */
-public class MainActivity extends AppCompatActivity implements INotesShowView,
+public class MainActivity extends AppCompatActivity implements NotesContract.View,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
@@ -49,12 +49,11 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
     @Bind(R.id.fab)
     FloatingActionButton mAddNoteButton;
 
-    //    private List<Note> mNoteList;
-    private IListNotesPresenter mShowPresenter;
     private NotesAdapter mNotesAdapter;
     private long[] mHits = new long[2];
     private ActionMode.Callback mMultiMode;
     private MultiSelector mSelector;
+    private NotesPresenter mNotesPresenter;
 
 
     @Override
@@ -70,8 +69,9 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         getSupportActionBar().setTitle(R.string.all_notes);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager
                 (MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        mShowPresenter = new ListNotesPresenter(this, this);
-        mShowPresenter.showNotesList();
+
+        mNotesPresenter = new NotesPresenter(this, this);
+        mNotesPresenter.showNotesList();
         mNotesViews.setLayoutManager(mLinearLayoutManager);
         mNotesViews.addItemDecoration(
                 new DividerItemDecoration(this, null));
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
 
     @Override
     public void onRefresh() {
-        mShowPresenter.refreshNotes();
+        mNotesPresenter.refreshNotes();
     }
 
     @OnClick(R.id.fab)
@@ -153,13 +153,13 @@ public class MainActivity extends AppCompatActivity implements INotesShowView,
         switch (requestCode) {
             case ADD_NOTE_EVENT:
                 if (resultCode == AddNoteActivity.ADD_SUCCESS) {
-                    mShowPresenter.showNotesList();
+                    mNotesPresenter.showNotesList();
                 }
                 break;
 
             case EDIT_NOTE_EVENT:
                 if (resultCode == EditNoteActivity.UPDATE_SUCCESS) {
-                    mShowPresenter.showNotesList();
+                    mNotesPresenter.showNotesList();
                 }
                 break;
         }

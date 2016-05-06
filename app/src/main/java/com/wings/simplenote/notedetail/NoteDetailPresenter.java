@@ -1,4 +1,4 @@
-package com.wings.simplenote.presenter.impl;
+package com.wings.simplenote.notedetail;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,17 +6,15 @@ import android.os.AsyncTask;
 import com.wings.simplenote.model.INoteModel;
 import com.wings.simplenote.model.NoteModel;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.INoteDetailPresenter;
-import com.wings.simplenote.view.INoteUpdateView;
 
 /**
  * Created by wing on 2016/4/29.
  */
-public class NoteDetailPresenter implements INoteDetailPresenter {
+public class NoteDetailPresenter implements NoteDetailContract.Presenter {
     private INoteModel mNoteModel;
-    private INoteUpdateView mNoteUpdateView;
+    private NoteDetailContract.View mNoteUpdateView;
 
-    public NoteDetailPresenter(Context context, INoteUpdateView iNoteView) {
+    public NoteDetailPresenter(Context context, NoteDetailContract.View iNoteView) {
         this.mNoteModel = new NoteModel(context);
         this.mNoteUpdateView = iNoteView;
     }

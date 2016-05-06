@@ -1,18 +1,16 @@
-package com.wings.simplenote.view;
+package com.wings.simplenote.addeditnote;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.IUpdateNotePresenter;
-import com.wings.simplenote.presenter.impl.UpdateNotePresenter;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
-import com.wings.simplenote.view.fragment.EditNoteFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,7 +19,7 @@ import butterknife.OnClick;
 /**
  * EditNoteActivity ,contain EditNoteFragment and Toolbar.
  */
-public class EditNoteActivity extends AppCompatActivity implements INoteView {
+public class EditNoteActivity extends AppCompatActivity implements AddEditNoteContract.View {
 
     public static final int UPDATE_SUCCESS = 1;
     public static final int UPDATE_FAILED = 0;
@@ -31,7 +29,6 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     FloatingActionButton mUpdateFab;
     private EditNoteFragment mNoteFragment;
     private Note mNoteItem;
-    private IUpdateNotePresenter mUpdateNotePresenter;
     private Note note;
 
     @Override
@@ -47,7 +44,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
         mNoteItem = (Note) getIntent().getSerializableExtra("note");
         mNoteFragment = (EditNoteFragment)
                 getFragmentManager().findFragmentByTag(getString(R.string.edit_notes_fragment));
-        mUpdateNotePresenter = new UpdateNotePresenter(this, this);
+
     }
 
     private void initView() {
@@ -68,7 +65,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     private void updateNote() {
         if (mNoteFragment.confirmNoteComplete()) {
             note = mNoteFragment.getNote(false, mNoteItem.id);
-            mUpdateNotePresenter.updateNote(note);
+            new AddEditNotePresenter(this, this).updateNote(note);
         }
     }
 
@@ -101,5 +98,15 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
     @OnClick(R.id.fab_update)
     public void onClick() {
         updateNote();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

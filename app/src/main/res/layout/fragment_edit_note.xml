@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="@string/edit_notes_fragment"
-    tools:context=".view.fragment.EditNoteFragment"
+    tools:context=".addeditnote.EditNoteFragment"
     tools:showIn="@layout/activity_edit_note">
 
     <include layout="@layout/content_input_note" />

@@ -1,4 +1,4 @@
-package com.wings.simplenote.view.fragment;
+package com.wings.simplenote.addeditnote;
 
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -23,6 +23,8 @@ import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.receiver.ReminderReceiver;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
+import com.wings.simplenote.view.dialogfragment.DatePickerFragment;
+import com.wings.simplenote.view.dialogfragment.TimePickerFragment;
 
 import java.util.Calendar;
 import java.util.Date;

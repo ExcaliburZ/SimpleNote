@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.wings.simplenote.R;
-import com.wings.simplenote.view.MainActivity;
+import com.wings.simplenote.notes.MainActivity;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

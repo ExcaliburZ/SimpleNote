@@ -1,4 +1,4 @@
-package com.wings.simplenote.view.fragment;
+package com.wings.simplenote.view.dialogfragment;
 
 
 import android.app.DatePickerDialog;

@@ -1,27 +1,25 @@
-package com.wings.simplenote.presenter.impl;
+package com.wings.simplenote.notes;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
-import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.model.INoteModel;
 import com.wings.simplenote.model.NoteModel;
-import com.wings.simplenote.presenter.IListNotesPresenter;
-import com.wings.simplenote.view.INotesShowView;
+import com.wings.simplenote.model.domain.Note;
 
 import java.util.List;
 
 /**
  * Created by wing on 2016/4/20.
  */
-public class ListNotesPresenter implements IListNotesPresenter {
-    private INotesShowView notesShowView;
-    private INoteModel noteModel;
+public class NotesPresenter implements NotesContract.Presenter {
+    private NotesContract.View notesShowView;
+    private INoteModel mNoteModel;
 
-    public ListNotesPresenter(Context context, INotesShowView notesShowView) {
+    public NotesPresenter(Context context, NotesContract.View notesShowView) {
         this.notesShowView = notesShowView;
-        noteModel = new NoteModel(context);
+        mNoteModel = new NoteModel(context);
     }
 
     @Override
@@ -32,6 +30,20 @@ public class ListNotesPresenter implements IListNotesPresenter {
     @Override
     public void refreshNotes() {
         new NotesRefreshAsyncTask().execute();
+    }
+
+    @Override
+    public void deleteNote(Long id) {
+        new DeleteNoteAsyncTask().execute(id);
+    }
+
+    class DeleteNoteAsyncTask extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... params) {
+            mNoteModel.deleteNote(params[0]);
+            return null;
+        }
     }
 
     class NotesShowAsyncTask extends AsyncTask<Void, Void, List<Note>> {
@@ -71,7 +83,7 @@ public class ListNotesPresenter implements IListNotesPresenter {
     }
 
     private List<Note> getNotes() {
-        List<Note> notes = noteModel.selectAll();
+        List<Note> notes = mNoteModel.selectAll();
         SystemClock.sleep(1000);
         return notes;
     }

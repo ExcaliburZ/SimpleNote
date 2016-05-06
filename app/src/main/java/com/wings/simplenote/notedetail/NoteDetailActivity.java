@@ -1,4 +1,4 @@
-package com.wings.simplenote.view;
+package com.wings.simplenote.notedetail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wings.simplenote.R;
+import com.wings.simplenote.addeditnote.EditNoteActivity;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.INoteDetailPresenter;
-import com.wings.simplenote.presenter.impl.NoteDetailPresenter;
 import com.wings.simplenote.utils.TimeUtils;
 
 import java.util.Date;
@@ -26,7 +25,7 @@ import butterknife.OnClick;
 /**
  * The Activity to show the note detail.
  */
-public class NoteDetailActivity extends AppCompatActivity implements INoteUpdateView {
+public class NoteDetailActivity extends AppCompatActivity implements NoteDetailContract.View {
 
     private static final String TAG = "NoteDetailActivity";
     private static final int EDIT_NOTE_ITEM = 0;
@@ -47,7 +46,6 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
     @Bind(R.id.load)
     ProgressBar mLoadProgessBar;
     private Note mNoteItem;
-    private INoteDetailPresenter mNoteDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +88,7 @@ public class NoteDetailActivity extends AppCompatActivity implements INoteUpdate
 
     private void initDate() {
         mNoteItem = (Note) getIntent().getSerializableExtra("note");
-        mNoteDetailPresenter = new NoteDetailPresenter(this, this);
+        new NoteDetailPresenter(this, this);
     }
 
     @OnClick(R.id.edit)

@@ -1,4 +1,4 @@
-package com.wings.simplenote.adapter;
+package com.wings.simplenote.notes.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,11 +19,10 @@ import android.widget.TextView;
 import com.wings.simplenote.R;
 import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.presenter.IDeleteNotePresenter;
-import com.wings.simplenote.presenter.impl.DeleteNotePresenter;
+import com.wings.simplenote.notes.NotesPresenter;
 import com.wings.simplenote.utils.TimeUtils;
-import com.wings.simplenote.view.MainActivity;
-import com.wings.simplenote.view.NoteDetailActivity;
+import com.wings.simplenote.notes.MainActivity;
+import com.wings.simplenote.notedetail.NoteDetailActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -38,7 +37,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private List<Note> mNotesList;
     private MultiSelector mSelector;
     private boolean isMultiMode;
-    private IDeleteNotePresenter mDeleteNotePresenter;
     private ActionMode.Callback mActionSelectMode = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
@@ -74,7 +72,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private ActionMode mActionMode;
 
     private void deleteSelectedNotes() {
-        mDeleteNotePresenter = new DeleteNotePresenter(mContext);
+
         new AlertDialog.Builder(mContext)
                 .setTitle(R.string.title_delete)
                 .setMessage(R.string.content_delete)
@@ -86,7 +84,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                             if (mSelector.contains(item.id)) {
                                 mNotesList.remove(item);
                                 mSelector.remove(item.id);
-                                mDeleteNotePresenter.deleteNote(item.id);
+                                new NotesPresenter(mContext, null).deleteNote(item.id);
                             }
                         }
                         notifyDataSetChanged();
