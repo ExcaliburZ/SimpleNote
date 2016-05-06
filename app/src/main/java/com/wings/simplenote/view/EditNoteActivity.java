@@ -2,10 +2,9 @@ package com.wings.simplenote.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.ImageButton;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.Note;
@@ -26,10 +25,10 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
 
     public static final int UPDATE_SUCCESS = 1;
     public static final int UPDATE_FAILED = 0;
-    @Bind(R.id.ib_update)
-    ImageButton mIbUpdate;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    @Bind(R.id.fab_update)
+    FloatingActionButton mUpdateFab;
     private EditNoteFragment mNoteFragment;
     private Note mNoteItem;
     private IUpdateNotePresenter mUpdateNotePresenter;
@@ -53,7 +52,7 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
 
     private void initView() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mNoteFragment.setTitleText(mNoteItem.title);
         mNoteFragment.setContentText(mNoteItem.content);
         mNoteFragment.setItemID(mNoteItem.id);
@@ -63,15 +62,6 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
             mNoteFragment.setAlarmChecked(true);
             mNoteFragment.setDateText(TimeUtils.formatDate(mNoteItem.date));
             mNoteFragment.setTimeText(TimeUtils.formatTime(mNoteItem.date));
-        }
-    }
-
-    @OnClick({R.id.ib_update})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ib_update:
-                updateNote();
-                break;
         }
     }
 
@@ -106,5 +96,10 @@ public class EditNoteActivity extends AppCompatActivity implements INoteView {
         SingletonToastUtils.showToast(this, "update failed");
         setResult(UPDATE_FAILED);
         finish();
+    }
+
+    @OnClick(R.id.fab_update)
+    public void onClick() {
+        updateNote();
     }
 }

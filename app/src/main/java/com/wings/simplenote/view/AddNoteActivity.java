@@ -2,10 +2,11 @@ package com.wings.simplenote.view;
 
 import android.app.PendingIntent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.listener.OnConfirmListener;
@@ -28,10 +29,8 @@ public class AddNoteActivity extends AppCompatActivity implements INoteView {
     public static final int ADD_SUCCESS = 1;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.ib_save)
-    ImageButton mIbSave;
-    @Bind(R.id.ib_trash)
-    ImageButton mIbTrash;
+    @Bind(R.id.fab_save)
+    FloatingActionButton mSaveFab;
     private EditNoteFragment mNoteFragment;
     private PendingIntent alarmIntent;
 
@@ -53,20 +52,33 @@ public class AddNoteActivity extends AppCompatActivity implements INoteView {
 
     private void initView() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
-    @OnClick({R.id.ib_save, R.id.ib_trash})
+    @OnClick({R.id.fab_save})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ib_save:
+            case R.id.fab_save:
                 saveNote();
                 break;
-            case R.id.ib_trash:
-                confirmTrash();
-                break;
+
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                confirmTrash();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        confirmTrash();
     }
 
     private void saveNote() {

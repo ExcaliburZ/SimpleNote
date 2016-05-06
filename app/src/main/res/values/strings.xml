@@ -10,7 +10,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_new_note">NewNoteActivity</string>
+    <string name="title_activity_new_note">New Note</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -105,7 +105,7 @@
     <string name="content_default">What is on your mind?</string>
     <string name="time_separator">:</string>
     <string name="date_separator">-</string>
-    <string name="title_activity_edit_note">EditNoteActivity</string>
+    <string name="title_activity_edit_note">Edit Note</string>
     <string name="edit_notes_fragment">edit_notes_fragment</string>
     <string name="all_notes">All Notes</string>
     <string name="add_note_fragment">add_note_fragment</string>
