@@ -145,10 +145,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         if (itemSelected) {
             holder.itemView.setBackgroundColor(
-                    mContext.getResources().getColor(R.color.cardview_select_background));
+                    mContext.getResources().getColor(R.color.black_transparent));
         } else {
             holder.itemView.setBackgroundColor(
-                    mContext.getResources().getColor(R.color.cardview_light_background));
+                    mContext.getResources().getColor(R.color.white_light));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
