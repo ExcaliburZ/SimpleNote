@@ -1,6 +1,7 @@
 package com.wings.simplenote.notes;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
@@ -13,14 +14,19 @@ import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.wings.simplenote.R;
-import com.wings.simplenote.notes.adapter.NotesAdapter;
 import com.wings.simplenote.addeditnote.AddNoteActivity;
 import com.wings.simplenote.addeditnote.EditNoteActivity;
 import com.wings.simplenote.config.DividerItemDecoration;
 import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
+import com.wings.simplenote.notes.adapter.ChoiceModeEvent;
+import com.wings.simplenote.notes.adapter.EnterActivityEvent;
+import com.wings.simplenote.notes.adapter.NotesAdapter;
+import com.wings.simplenote.utils.RxBus;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.view.dialogfragment.AboutFragment;
 
@@ -29,6 +35,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * The Main Interface to show the notes list.
@@ -54,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
     private ActionMode.Callback mMultiMode;
     private MultiSelector mSelector;
     private NotesPresenter mNotesPresenter;
+    private Subscription rxSubscription;
+    private ActionMode mActionMode;
 
 
     @Override
@@ -86,6 +96,46 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
 
     private void setListener() {
         mRefreshLayout.setOnRefreshListener(this);
+        rxSubscription = RxBus.getDefault()
+                .toObserverable(ChoiceModeEvent.class)
+                .subscribe(
+                        new Action1<ChoiceModeEvent>() {
+                            @Override
+                            public void call(ChoiceModeEvent choiceModeEvent) {
+                                if (choiceModeEvent.isChoiceMode()) {
+                                    mActionMode = startActionMode(choiceModeEvent.getCallback());
+                                    setStatusBarColor();
+                                } else {
+                                    mActionMode.finish();
+                                }
+                            }
+                        }
+                );
+        RxBus.getDefault()
+                .toObserverable(EnterActivityEvent.class)
+                .subscribe(new Action1<EnterActivityEvent>() {
+                    @Override
+                    public void call(EnterActivityEvent enterActivityEvent) {
+                        startActivity(enterActivityEvent.getIntent());
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
+    }
+
+    private void setStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
     }
 
     @Override

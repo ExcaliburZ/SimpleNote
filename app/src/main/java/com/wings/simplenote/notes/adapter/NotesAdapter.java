@@ -1,28 +1,26 @@
 package com.wings.simplenote.notes.adapter;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.notes.NotesPresenter;
-import com.wings.simplenote.utils.TimeUtils;
-import com.wings.simplenote.notes.MainActivity;
 import com.wings.simplenote.notedetail.NoteDetailActivity;
+import com.wings.simplenote.notes.NotesPresenter;
+import com.wings.simplenote.utils.RxBus;
+import com.wings.simplenote.utils.TimeUtils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -33,14 +31,14 @@ import java.util.List;
  */
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private static final String TAG = "NotesAdapter";
-    private AppCompatActivity mContext;
+    private Context mContext;
     private List<Note> mNotesList;
     private MultiSelector mSelector;
     private boolean isMultiMode;
     private ActionMode.Callback mActionSelectMode = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
-            mContext.getMenuInflater().inflate(R.menu.menu_multi_mode, menu);
+            new MenuInflater(mContext).inflate(R.menu.menu_multi_mode, menu);
             return true;
         }
 
@@ -69,7 +67,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             notifyDataSetChanged();
         }
     };
-    private ActionMode mActionMode;
 
     private void deleteSelectedNotes() {
 
@@ -92,7 +89,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 }).create().show();
     }
 
-    public NotesAdapter(AppCompatActivity context, List<Note> notesList, MultiSelector mSelectedList) {
+    public NotesAdapter(Context context, List<Note> notesList, MultiSelector mSelectedList) {
         this.mContext = context;
         this.mNotesList = notesList;
         this.mSelector = mSelectedList;
@@ -131,7 +128,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public void onBindViewHolder(final NoteViewHolder holder, final int position) {
         final Note noteItem = mNotesList.get(position);
         holder.titleView.setText(noteItem.title);
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         calendar.setTime(noteItem.createDate);
         String dateTime;
         //if today ,set time .else set date
@@ -165,8 +162,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             @Override
             public boolean onLongClick(View v) {
                 if (!isMultiMode) {
-                    mActionMode = mContext.startActionMode(mActionSelectMode);
-                    setStatusBarColor();
+                    RxBus.getDefault().post(new ChoiceModeEvent(true, mActionSelectMode));
                 }
                 selectItem(position);
                 return true;
@@ -175,18 +171,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         });
     }
 
-    private void setStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = mContext.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-        }
-    }
-
     private void enterNoteDetail(Note noteItem) {
         Intent intent = new Intent(mContext, NoteDetailActivity.class);
         intent.putExtra("note", noteItem);
-        mContext.startActivityForResult(intent, MainActivity.EDIT_NOTE_EVENT);
+        RxBus.getDefault().post(new EnterActivityEvent(intent));
     }
 
     private void selectItem(int position) {
@@ -201,7 +189,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         } else {
             mSelector.remove(getItemId(position));
             if (mSelector.isEmpty()) {
-                mActionMode.finish();
+                RxBus.getDefault().post(new ChoiceModeEvent(false, null));
             }
         }
     }
