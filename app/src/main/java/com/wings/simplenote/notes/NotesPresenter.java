@@ -1,7 +1,6 @@
 package com.wings.simplenote.notes;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import com.wings.simplenote.model.INoteModel;
@@ -10,76 +9,88 @@ import com.wings.simplenote.model.domain.Note;
 
 import java.util.List;
 
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by wing on 2016/4/20.
  */
 public class NotesPresenter implements NotesContract.Presenter {
-    private NotesContract.View notesShowView;
+    private NotesContract.View mNotesShowView;
     private INoteModel mNoteModel;
-
     public NotesPresenter(Context context, NotesContract.View notesShowView) {
-        this.notesShowView = notesShowView;
+        this.mNotesShowView = notesShowView;
         mNoteModel = new NoteModel(context);
     }
 
+    private Observable.OnSubscribe<List> mGetNoteCall = new Observable.OnSubscribe<List>() {
+        @Override
+        public void call(Subscriber<? super List> subscriber) {
+            List<Note> notes = getNotes();
+            subscriber.onNext(notes);
+            subscriber.onCompleted();
+        }
+    };
+
     @Override
     public void showNotesList() {
-        new NotesShowAsyncTask().execute();
+        Observable.create(mGetNoteCall)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List>() {
+
+                    @Override
+                    public void onNext(List notes) {
+                        mNotesShowView.showNotes(notes);
+                        mNotesShowView.cancelLoading();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     @Override
     public void refreshNotes() {
-        new NotesRefreshAsyncTask().execute();
+        Observable.create(mGetNoteCall)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List>() {
+                    @Override
+                    public void onNext(List list) {
+                        mNotesShowView.refreshNotes(list);
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     @Override
-    public void deleteNote(Long id) {
-        new DeleteNoteAsyncTask().execute(id);
-    }
-
-    class DeleteNoteAsyncTask extends AsyncTask<Long, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Long... params) {
-            mNoteModel.deleteNote(params[0]);
-            return null;
-        }
-    }
-
-    class NotesShowAsyncTask extends AsyncTask<Void, Void, List<Note>> {
-
-        @Override
-        protected List<Note> doInBackground(Void... params) {
-            return getNotes();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            notesShowView.showLoading();
-        }
-
-        @Override
-        protected void onPostExecute(List<Note> notes) {
-            super.onPostExecute(notes);
-            notesShowView.showNotes(notes);
-            notesShowView.cancelLoading();
-        }
-    }
-
-    class NotesRefreshAsyncTask extends AsyncTask<Void, Void, List<Note>> {
-
-        @Override
-        protected List<Note> doInBackground(Void... params) {
-            return getNotes();
-        }
-
-        @Override
-        protected void onPostExecute(List<Note> notes) {
-            super.onPostExecute(notes);
-            notesShowView.refreshNotes(notes);
-            notesShowView.cancelLoading();
-        }
+    public void deleteNote(final Long id) {
+        Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                mNoteModel.deleteNote(id);
+            }
+        }).subscribeOn(Schedulers.io());
     }
 
     private List<Note> getNotes() {
