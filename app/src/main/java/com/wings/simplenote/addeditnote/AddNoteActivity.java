@@ -86,15 +86,23 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
     }
 
     private void confirmTrash() {
-        TrashConfirmFragment fragment = new TrashConfirmFragment();
-        fragment.setOnConfirmListener(new OnConfirmListener() {
-            @Override
-            public void onConfirm() {
-                exit();
-            }
+        if (noteIsEmpty()) {
+            finish();
+        } else {
+            TrashConfirmFragment fragment = new TrashConfirmFragment();
+            fragment.setOnConfirmListener(new OnConfirmListener() {
+                @Override
+                public void onConfirm() {
+                    exit();
+                }
 
-        });
-        fragment.show(getFragmentManager(), TRASH_CONFIRM_FRAGMENT);
+            });
+            fragment.show(getFragmentManager(), TRASH_CONFIRM_FRAGMENT);
+        }
+    }
+
+    private boolean noteIsEmpty() {
+        return mNoteFragment.isNoteEmpty();
     }
 
     private void exit() {

@@ -44,6 +44,8 @@ public class MultiSelector {
         return mSet.isEmpty();
     }
 
-
+    public int size() {
+        return mSet.size();
+    }
 }
 

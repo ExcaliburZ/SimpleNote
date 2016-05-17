@@ -183,14 +183,18 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         notifyItemChanged(position);
     }
 
-    private void setItemSelected(int position, boolean beSelect) {
-        if (beSelect) {
+    private void setItemSelected(int position, boolean isSelected) {
+        if (isSelected) {
             mSelector.add(getItemId(position));
         } else {
             mSelector.remove(getItemId(position));
             if (mSelector.isEmpty()) {
                 RxBus.getDefault().post(new ChoiceModeEvent(false, null));
             }
+        }
+        int size = mSelector.size();
+        if (size > 0) {
+            RxBus.getDefault().post(new ChoiceCountEvent(String.valueOf(size)));
         }
     }
 

@@ -85,7 +85,6 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }

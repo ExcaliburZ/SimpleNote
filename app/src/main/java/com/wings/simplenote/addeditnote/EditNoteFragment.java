@@ -56,6 +56,7 @@ public class EditNoteFragment extends Fragment {
     private PendingIntent alarmIntent;
     private AlarmManager alarmMgr;
     private Intent mIntent;
+    private View mFragmentView;
 
     public void setItemID(Long itemID) {
         this.mItemID = itemID;
@@ -73,16 +74,17 @@ public class EditNoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View FragmentView = inflater.inflate(R.layout.fragment_edit_note, container, false);
-        ButterKnife.bind(this, FragmentView);
+        mFragmentView = inflater.inflate(R.layout.fragment_edit_note, container, false);
+        ButterKnife.bind(this, mFragmentView);
         alarmMgr = (AlarmManager) getActivity().
                 getSystemService(Context.ALARM_SERVICE);
         initView();
-        return FragmentView;
+        return mFragmentView;
     }
 
     private void initView() {
         toggleSoftKeyboard();
+
         mCbAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -130,7 +132,7 @@ public class EditNoteFragment extends Fragment {
                         (InputMethodManager) mEtTitle.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.showSoftInput(mEtTitle, 0);
             }
-        }, 998);
+        }, 500);
     }
 
     public Note getNote(Boolean isAddNoted, long id) {
@@ -308,5 +310,11 @@ public class EditNoteFragment extends Fragment {
 
     public void setTimeText(String time) {
         mTvTime.setText(time);
+    }
+
+    public boolean isNoteEmpty() {
+        return TextUtils.isEmpty(mEtTitle.getText())
+                && TextUtils.isEmpty(mEtContent.getText())
+                && !mCbAlarm.isChecked();
     }
 }

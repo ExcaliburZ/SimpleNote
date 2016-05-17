@@ -23,6 +23,7 @@ import com.wings.simplenote.addeditnote.EditNoteActivity;
 import com.wings.simplenote.config.DividerItemDecoration;
 import com.wings.simplenote.config.MultiSelector;
 import com.wings.simplenote.model.domain.Note;
+import com.wings.simplenote.notes.adapter.ChoiceCountEvent;
 import com.wings.simplenote.notes.adapter.ChoiceModeEvent;
 import com.wings.simplenote.notes.adapter.EnterActivityEvent;
 import com.wings.simplenote.notes.adapter.NotesAdapter;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
     private NotesPresenter mNotesPresenter;
     private Subscription rxSubscription;
     private ActionMode mActionMode;
+    private Subscription mEnterSubscribe;
+    private Subscription mTitleSubscribe;
 
 
     @Override
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
                             }
                         }
                 );
-        RxBus.getDefault()
+        mEnterSubscribe = RxBus.getDefault()
                 .toObserverable(EnterActivityEvent.class)
                 .subscribe(new Action1<EnterActivityEvent>() {
                     @Override
@@ -119,6 +122,15 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
                         startActivity(enterActivityEvent.getIntent());
                     }
                 });
+        mTitleSubscribe = RxBus.getDefault().
+                toObserverable(ChoiceCountEvent.class)
+                .subscribe(new Action1<ChoiceCountEvent>() {
+                    @Override
+                    public void call(ChoiceCountEvent event) {
+                        mActionMode.setTitle(event.getTitle());
+                    }
+                });
+
 
     }
 
@@ -127,6 +139,12 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
         super.onDestroy();
         if (!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
+        }
+        if (!mEnterSubscribe.isUnsubscribed()) {
+            mEnterSubscribe.unsubscribe();
+        }
+        if (!mTitleSubscribe.isUnsubscribed()) {
+            mTitleSubscribe.unsubscribe();
         }
     }
 

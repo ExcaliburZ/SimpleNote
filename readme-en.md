@@ -4,12 +4,12 @@
 ##Introduction
 The simple in blob is too simple,Master of Technology's project is too diffcult.  
 This is a Note APP with Just good complexity,And it is Consistent with MVP architecture design and Material Design,easy to understand.    
-it is suitable for MVP's learning and promote. 
+it is suitable for MVP's learning and promote.
 
 - MVP architecture design,the project has clear structure,low coupling,commuciate with interface between each layer.
 - The code has low redundancy,new note multiplex Fragment with edit note.
 - use RxJava replace AsyncTask to perform asynchronous operations,use RxBus as Event Bus.
-
+:tada:
 
 ##Download
 [Download by Vps](http://182.254.156.215:8080/simple_note.apk)  
