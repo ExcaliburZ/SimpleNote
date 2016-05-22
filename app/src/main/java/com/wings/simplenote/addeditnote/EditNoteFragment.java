@@ -204,9 +204,11 @@ public class EditNoteFragment extends Fragment {
         Date timeDate = TimeUtils.parseTime(timeStr);
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(timeDate);
+
         rightNow.set(Calendar.YEAR, year);
         rightNow.set(Calendar.MONTH, monthOfYear);
         rightNow.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
         if (rightNow.getTimeInMillis() < System.currentTimeMillis() + 60000) {
             //Alarm time over now less than one minute,choose time again
             SingletonToastUtils.showToast(getActivity(), "The time has passed");
@@ -287,6 +289,7 @@ public class EditNoteFragment extends Fragment {
         mIntent = new Intent(getActivity(), ReminderReceiver.class);
         mIntent.putExtra("title", item.title);
         mIntent.putExtra("content", item.content);
+
         alarmIntent = PendingIntent.getBroadcast(getActivity(), (int) item.id, mIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.set(AlarmManager.RTC_WAKEUP, date.getTime(), alarmIntent);

@@ -1,8 +1,7 @@
 package com.wings.simplenote.listener;
 
 /**
- * Created by wing on 2016/4/28.
- * Time Pick call-back hook.
+ * Time Pick call-back callback.
  */
 public interface OnTimePickListener {
     void onTimePick(int hourOfDay, int minute);

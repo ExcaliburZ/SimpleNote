@@ -1,6 +1,5 @@
 package com.wings.simplenote.addeditnote;
 
-import android.app.PendingIntent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,16 +8,22 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.wings.simplenote.R;
-import com.wings.simplenote.listener.OnConfirmListener;
 import com.wings.simplenote.model.domain.Note;
+import com.wings.simplenote.utils.RxBus;
 import com.wings.simplenote.utils.SingletonToastUtils;
 import com.wings.simplenote.view.dialogfragment.TrashConfirmFragment;
+import com.wings.simplenote.view.dialogfragment.event.TrashEvent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Subscription;
+import rx.functions.Action1;
 
 
+/**
+ * add note Activity,use EditNoteFragment to edit data
+ */
 public class AddNoteActivity extends AppCompatActivity implements AddEditNoteContract.View {
 
     private static final String TAG = "AddNoteActivity";
@@ -29,8 +34,7 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
     @Bind(R.id.fab_save)
     FloatingActionButton mSaveFab;
     private EditNoteFragment mNoteFragment;
-    private PendingIntent alarmIntent;
-
+    private Subscription mTrashConfirmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,15 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
     private void initData() {
         mNoteFragment = (EditNoteFragment)
                 getFragmentManager().findFragmentByTag(getString(R.string.add_note_fragment));
+
+        mTrashConfirmed = RxBus.getDefault()
+                .toObserverable(TrashEvent.class)
+                .subscribe(new Action1<TrashEvent>() {
+                    @Override
+                    public void call(TrashEvent trashEvent) {
+                        exit();
+                    }
+                });
     }
 
 
@@ -59,7 +72,6 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
             case R.id.fab_save:
                 saveNote();
                 break;
-
         }
     }
 
@@ -87,16 +99,11 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
 
     private void confirmTrash() {
         if (noteIsEmpty()) {
+            //note is not edit
             finish();
         } else {
+            //note has been edit
             TrashConfirmFragment fragment = new TrashConfirmFragment();
-            fragment.setOnConfirmListener(new OnConfirmListener() {
-                @Override
-                public void onConfirm() {
-                    exit();
-                }
-
-            });
             fragment.show(getFragmentManager(), TRASH_CONFIRM_FRAGMENT);
         }
     }
@@ -124,11 +131,19 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
     public void showSuccessRemind() {
         setResult(ADD_SUCCESS);
         exit();
-        SingletonToastUtils.showToast(this, "add success");
+        SingletonToastUtils.showToast(this, getString(R.string.add_success));
     }
 
     @Override
     public void showFailureRemind() {
-        SingletonToastUtils.showToast(this, "Error,please try again");
+        SingletonToastUtils.showToast(this, getString(R.string.add_error));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!mTrashConfirmed.isUnsubscribed()) {
+            mTrashConfirmed.unsubscribe();
+        }
     }
 }

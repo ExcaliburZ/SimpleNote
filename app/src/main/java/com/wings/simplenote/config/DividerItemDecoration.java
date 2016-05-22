@@ -10,6 +10,9 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.Canvas;
 
+/**
+ * Divider Line.
+ */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
 	private Drawable mDivider;

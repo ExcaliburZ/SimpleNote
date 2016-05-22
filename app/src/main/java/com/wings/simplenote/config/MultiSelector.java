@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by wing on 2016/5/2.
  * For Choice Model ,save selected ItemId and whether in Choice Mode.
  */
 public class MultiSelector {

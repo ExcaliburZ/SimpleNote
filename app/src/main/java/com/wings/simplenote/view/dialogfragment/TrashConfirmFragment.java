@@ -7,19 +7,14 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.wings.simplenote.listener.OnConfirmListener;
+import com.wings.simplenote.utils.RxBus;
+import com.wings.simplenote.view.dialogfragment.event.TrashEvent;
 
 /**
  * DialogFragment to confirm whether trash.
  */
 public class TrashConfirmFragment extends DialogFragment
         implements DialogInterface.OnClickListener {
-    private static final String TAG = "TrashConfirmFragment";
-    private OnConfirmListener mConfirmListener;
-
-    public void setOnConfirmListener(OnConfirmListener onConfirmListener) {
-        this.mConfirmListener = onConfirmListener;
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,9 +28,7 @@ public class TrashConfirmFragment extends DialogFragment
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if (mConfirmListener != null) {
-            mConfirmListener.onConfirm();
-        }
+        RxBus.getDefault().post(new TrashEvent());
         this.dismiss();
     }
 }

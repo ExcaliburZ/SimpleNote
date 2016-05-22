@@ -50,16 +50,25 @@ public class EditNoteActivity extends AppCompatActivity implements AddEditNoteCo
     private void initView() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        restoreOriginData();
+        boolean hasAlarm = mNoteItem.hasAlarm;
+        if (hasAlarm) {
+            restoreAlarmData();
+        }
+    }
+
+    private void restoreAlarmData() {
+        mNoteFragment.setPicked(true);
+        mNoteFragment.setAlarmChecked(true);
+        mNoteFragment.setDateText(TimeUtils.formatDate(mNoteItem.date));
+        mNoteFragment.setTimeText(TimeUtils.formatTime(mNoteItem.date));
+    }
+
+    private void restoreOriginData() {
         mNoteFragment.setTitleText(mNoteItem.title);
         mNoteFragment.setContentText(mNoteItem.content);
         mNoteFragment.setItemID(mNoteItem.id);
-        boolean hasAlarm = mNoteItem.hasAlarm;
-        if (hasAlarm) {
-            mNoteFragment.setPicked(true);
-            mNoteFragment.setAlarmChecked(true);
-            mNoteFragment.setDateText(TimeUtils.formatDate(mNoteItem.date));
-            mNoteFragment.setTimeText(TimeUtils.formatTime(mNoteItem.date));
-        }
     }
 
     private void updateNote() {
@@ -67,16 +76,6 @@ public class EditNoteActivity extends AppCompatActivity implements AddEditNoteCo
             note = mNoteFragment.getNote(false, mNoteItem.id);
             new AddEditNotePresenter(this, this).updateNote(note);
         }
-    }
-
-    @Override
-    public void showProcess() {
-
-    }
-
-    @Override
-    public void dismissProcess() {
-
     }
 
     @Override
@@ -108,5 +107,15 @@ public class EditNoteActivity extends AppCompatActivity implements AddEditNoteCo
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showProcess() {
+
+    }
+
+    @Override
+    public void dismissProcess() {
+
     }
 }

@@ -115,4 +115,6 @@
     <string name="copyright_by_wing">copyright by wing</string>
     <string name="resume">The Normal Practice for MVP and Material Design : )</string>
     <string name="address">Welcome to Star and Fork on Github \nhttps://github.com/ExcaliburZ/SimpleNote</string>
+    <string name="add_success">add success</string>
+    <string name="add_error">Error,please try again</string>
 </resources>
