@@ -28,7 +28,7 @@ import com.wings.simplenote.notes.adapter.ChoiceModeEvent;
 import com.wings.simplenote.notes.adapter.EnterActivityEvent;
 import com.wings.simplenote.notes.adapter.NotesAdapter;
 import com.wings.simplenote.utils.RxBus;
-import com.wings.simplenote.utils.SingletonToastUtils;
+import com.wings.simplenote.utils.ToastUtils;
 import com.wings.simplenote.view.dialogfragment.AboutFragment;
 
 import java.util.List;
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements NotesContract.Vie
                     //between (SystemClock.uptimeMillis()- 2000) And SystemClock.uptimeMillis()
                     finish();
                 } else {
-                    SingletonToastUtils.showToast(this, getString(R.string.double_click_exit));
+                    ToastUtils.showToast(this, getString(R.string.double_click_exit));
                 }
                 return true;
         }

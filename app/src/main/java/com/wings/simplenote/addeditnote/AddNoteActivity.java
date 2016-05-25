@@ -10,7 +10,7 @@ import android.view.View;
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.utils.RxBus;
-import com.wings.simplenote.utils.SingletonToastUtils;
+import com.wings.simplenote.utils.ToastUtils;
 import com.wings.simplenote.view.dialogfragment.TrashConfirmFragment;
 import com.wings.simplenote.view.dialogfragment.event.TrashEvent;
 
@@ -131,12 +131,12 @@ public class AddNoteActivity extends AppCompatActivity implements AddEditNoteCon
     public void showSuccessRemind() {
         setResult(ADD_SUCCESS);
         exit();
-        SingletonToastUtils.showToast(this, getString(R.string.add_success));
+        ToastUtils.showToast(this, getString(R.string.add_success));
     }
 
     @Override
     public void showFailureRemind() {
-        SingletonToastUtils.showToast(this, getString(R.string.add_error));
+        ToastUtils.showToast(this, getString(R.string.add_error));
     }
 
     @Override

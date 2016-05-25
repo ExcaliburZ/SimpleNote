@@ -1,7 +1,7 @@
 package com.wings.simplenote.notes.adapter;
 
 /**
- * Created by wing on 2016/5/17.
+ * Event with the count the checked item.
  */
 public class ChoiceCountEvent {
     private String title;

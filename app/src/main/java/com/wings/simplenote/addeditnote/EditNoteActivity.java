@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.wings.simplenote.R;
 import com.wings.simplenote.model.domain.Note;
-import com.wings.simplenote.utils.SingletonToastUtils;
+import com.wings.simplenote.utils.ToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
 
 import butterknife.Bind;
@@ -80,7 +80,7 @@ public class EditNoteActivity extends AppCompatActivity implements AddEditNoteCo
 
     @Override
     public void showSuccessRemind() {
-        SingletonToastUtils.showToast(this, "update success");
+        ToastUtils.showToast(this, "update success");
         Intent data = new Intent();
         data.putExtra("edit", note);
         setResult(UPDATE_SUCCESS, data);
@@ -89,7 +89,7 @@ public class EditNoteActivity extends AppCompatActivity implements AddEditNoteCo
 
     @Override
     public void showFailureRemind() {
-        SingletonToastUtils.showToast(this, "update failed");
+        ToastUtils.showToast(this, "update failed");
         setResult(UPDATE_FAILED);
         finish();
     }

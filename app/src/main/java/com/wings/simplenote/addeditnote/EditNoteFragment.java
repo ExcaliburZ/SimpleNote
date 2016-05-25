@@ -21,7 +21,7 @@ import com.wings.simplenote.listener.OnDatePickListener;
 import com.wings.simplenote.listener.OnTimePickListener;
 import com.wings.simplenote.model.domain.Note;
 import com.wings.simplenote.receiver.ReminderReceiver;
-import com.wings.simplenote.utils.SingletonToastUtils;
+import com.wings.simplenote.utils.ToastUtils;
 import com.wings.simplenote.utils.TimeUtils;
 import com.wings.simplenote.view.dialogfragment.DatePickerFragment;
 import com.wings.simplenote.view.dialogfragment.TimePickerFragment;
@@ -211,14 +211,14 @@ public class EditNoteFragment extends Fragment {
 
         if (rightNow.getTimeInMillis() < System.currentTimeMillis() + 60000) {
             //Alarm time over now less than one minute,choose time again
-            SingletonToastUtils.showToast(getActivity(), "The time has passed");
+            ToastUtils.showToast(getActivity(), "The time has passed");
             pickDate();
         }
     }
 
     public boolean confirmNoteComplete() {
         if (TextUtils.isEmpty(mEtTitle.getText())) {
-            SingletonToastUtils.showToast(getActivity(), "title can't be empty");
+            ToastUtils.showToast(getActivity(), "title can't be empty");
             return false;
         }
         return true;
@@ -252,7 +252,7 @@ public class EditNoteFragment extends Fragment {
             private void confirmTimePast(Calendar rightNow) {
                 if (rightNow.getTimeInMillis() < System.currentTimeMillis() + 60000) {
                     //Alarm time over now less than one minute,choose time again
-                    SingletonToastUtils.showToast(getActivity(), "The time has passed");
+                    ToastUtils.showToast(getActivity(), "The time has passed");
                     pickTime();
                 }
             }

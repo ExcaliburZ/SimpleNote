@@ -3,7 +3,7 @@ package com.wings.simplenote.notes.adapter;
 import android.view.ActionMode;
 
 /**
- * Created by wing on 2016/5/9.
+ * Event to change Choice Mode.
  */
 public class ChoiceModeEvent {
     private boolean isChoiceMode;

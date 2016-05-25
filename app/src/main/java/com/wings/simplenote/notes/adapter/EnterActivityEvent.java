@@ -3,7 +3,7 @@ package com.wings.simplenote.notes.adapter;
 import android.content.Intent;
 
 /**
- * Created by wing on 2016/5/9.
+ * Event to Enter note detail Activity.
  */
 public class EnterActivityEvent {
     private Intent mIntent;

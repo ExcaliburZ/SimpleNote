@@ -17,6 +17,25 @@ import rx.schedulers.Schedulers;
 public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
     private INoteModel mNoteModel;
     private AddEditNoteContract.View mAddEditNoteView;
+    private Subscriber<Boolean> mEditNoteSubscriber = new Subscriber<Boolean>() {
+        @Override
+        public void onNext(Boolean result) {
+            if (result) {
+                mAddEditNoteView.showSuccessRemind();
+            } else {
+                mAddEditNoteView.showFailureRemind();
+            }
+        }
+
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+        }
+    };
 
     public AddEditNotePresenter(Context context, AddEditNoteContract.View iNoteView) {
         this.mNoteModel = new NoteModel(context);
@@ -33,28 +52,10 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
                 subscriber.onNext(result);
                 subscriber.onCompleted();
             }
-        }).subscribeOn(Schedulers.io())
+        })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        if (aBoolean) {
-                            mAddEditNoteView.showSuccessRemind();
-                        } else {
-                            mAddEditNoteView.showFailureRemind();
-                        }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+                .subscribe(mEditNoteSubscriber);
     }
 
 
@@ -66,26 +67,9 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
                 boolean result = mNoteModel.updateNote(note);
                 subscriber.onNext(result);
             }
-        }).subscribeOn(Schedulers.io())
+        })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Boolean>() {
-                    @Override
-                    public void onNext(Boolean result) {
-                        if (result) {
-                            mAddEditNoteView.showSuccessRemind();
-                        } else {
-                            mAddEditNoteView.showFailureRemind();
-                        }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-                });
+                .subscribe(mEditNoteSubscriber);
     }
 }
